@@ -6,7 +6,9 @@ chmod +x brew.sh
 ./cargo.sh
 ./brew.sh
 
-cp ./.gitignore_global ~/
+ln -s ./.config ~/
+
+ln ./.gitignore_global ~/
 git config --global core.excludesfile ~/.gitignore_global
 
 source .zshrc
