@@ -11,6 +11,7 @@ regular_packages=(
 	"atuin"
 	"gh"
 	"font-hack-nerd-font"
+  "prettierd"
 )
 
 cask_packages=(
