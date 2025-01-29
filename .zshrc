@@ -5,14 +5,14 @@ eval "$(starship init zsh)"
 alias lg="lazygit"
 
 function resetLP() {
-    defaults write com.apple.dock ResetLaunchPad -bool true; killall Dock
+  defaults write com.apple.dock ResetLaunchPad -bool true; killall Dock
 }
 
 function bestytdl() {
-    youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio' --merge-output-format mp4 "$1"
+  youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio' --merge-output-format mp4 "$1"
 }
 function nd() {
-    mkdir -p -- "$1" && cd -P -- "$1"
+  mkdir -p -- "$1" && cd -P -- "$1"
 }
 
 function fs() {
@@ -40,11 +40,11 @@ function o() {
 }
 
 nv() {
-    if [ $# -eq 0 ]; then
-        nvim .
-    else
-        nvim "$@"
-    fi
+  if [ $# -eq 0 ]; then
+      nvim .
+  else
+      nvim "$@"
+  fi
 }
 
 # Easier navigation: .., ..., ...., ....., ~ and -
@@ -69,6 +69,8 @@ alias lsd="eza -lF ${colorflag} | grep --color=never '^d'"
 
 # Always use color output for `ls`
 alias ls='eza --icons -F -H --group-directories-first --git -1'
+
+alias lsa='ls -a'
 
 # Always enable colored `grep` output
 # Note: `GREP_OPTIONS="--color=auto"` is deprecated, hence the alias usage.
