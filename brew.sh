@@ -19,6 +19,7 @@ regular_packages=(
   "nextdns"
   "ripgrep"
   "shfmt"
+  "stylua"
 )
 
 cask_packages=(
