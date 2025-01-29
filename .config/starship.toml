@@ -1,0 +1,24 @@
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = '''
+[┌───────────────────>](bold blue)
+[│](bold blue)$os$username$directory$rust$nodejs$deno$time
+[└─>](bold blue) '''
+
+# Disable the package module, hiding it from the prompt completely
+[package]
+disabled = true
+
+[directory]
+truncate_to_repo = false
+fish_style_pwd_dir_length = 1
+
+[username]
+show_always = true
+
+[time]
+disabled = false
+
+[os]
+disabled = false
