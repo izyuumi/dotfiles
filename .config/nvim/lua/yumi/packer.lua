@@ -106,8 +106,12 @@ return require("packer").startup(function(use)
 					"/target/"
 				},
 				formatter_by_ft = {
-					rust = formatters.lsp,
+          json = formatters.lsp,
 					lua = formatters.lsp,
+          markdown = formatters.prettierd,
+					rust = formatters.lsp,
+          sh = formatters.shfmt,
+          typescript = formatters.prettierd,
 					yaml = formatters.lsp,
 				},
 				fallback_formatter = {
