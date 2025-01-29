@@ -1,6 +1,11 @@
 #!/bin/bash
 
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+if command -v brew >/dev/null 2>&1; then
+    echo "Homebrew is already installed"
+else
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
 
 regular_packages=(
 	"deno"
