@@ -39,6 +39,14 @@ function o() {
 	fi;
 }
 
+nv() {
+    if [ $# -eq 0 ]; then
+        nvim .
+    else
+        nvim "$@"
+    fi
+}
+
 # Easier navigation: .., ..., ...., ....., ~ and -
 alias ..="cd .."
 alias ...="cd ../.."
