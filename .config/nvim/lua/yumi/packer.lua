@@ -92,7 +92,14 @@ return require("packer").startup(function(use)
 		end
 	}
 
-	use "Shatur/neovim-session-manager"
+  use {
+    'rmagatti/auto-session',
+    config = function()
+      require("auto-session").setup {
+        suppressed_dirs = { "~/", "~/Downloads", "/"},
+      }
+    end
+  }
 
 	use {
 		"elentok/format-on-save.nvim",
