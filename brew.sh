@@ -12,6 +12,7 @@ regular_packages=(
 	"gh"
 	"font-hack-nerd-font"
   "prettierd"
+	"nextdns"
 )
 
 cask_packages=(
@@ -22,7 +23,6 @@ cask_packages=(
 	"screen-studio"
 	"legcord"
 	"postman"
-	"nextdns"
 )
 
 echo "Installing regular packages..."
