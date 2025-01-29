@@ -18,6 +18,7 @@ regular_packages=(
 	"font-hack-nerd-font"
   "prettierd"
 	"nextdns"
+  "ripgrep"
 )
 
 cask_packages=(
