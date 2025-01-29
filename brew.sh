@@ -10,6 +10,7 @@ regular_packages=(
 	"starship"
 	"atuin"
 	"gh"
+	"font-hack-nerd-font"
 )
 
 cask_packages=(
