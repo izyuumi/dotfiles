@@ -7,7 +7,8 @@ require("nvim-tree").setup({
 	},
   filters = {
     custom = {
-      ".DS_Store"
+      ".DS_Store",
+      ".git",
     }
   }
 })
