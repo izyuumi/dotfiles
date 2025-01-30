@@ -36,3 +36,4 @@ end, { noremap = true, silent = true, expr = true })
 vim.keymap.set("n", "]b", function()
 	return "<CMD>" .. vim.v.count .. "bn<CR>"
 end, { noremap = true, silent = true, expr = true })
+
