@@ -1,4 +1,4 @@
 background-opacity = 0.9
 mouse-hide-while-typing = true
 font-family = "Hack Nerd Font"
-theme = dark:Raycast_Dark,light:Raycast_Light
+theme = Raycast_Dark
