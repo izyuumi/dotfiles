@@ -8,7 +8,9 @@ chmod +x brew.sh
 
 ln -s ./.config ~/
 
-ln ./.gitignore_global ~/
+ln -s ./.gitignore_global ~/
 git config --global core.excludesfile ~/.gitignore_global
+
+ln -s ./ghostty ~/Library/Application\ Support/com.mitchellh.ghostty/config
 
 source .zshrc
