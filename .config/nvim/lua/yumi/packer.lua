@@ -1,107 +1,106 @@
-vim.cmd [[packadd packer.nvim]]
+vim.cmd([[packadd packer.nvim]])
 
 return require("packer").startup(function(use)
-	use "wbthomason/packer.nvim"
+	use("wbthomason/packer.nvim")
 
-	use {
+	use({
 		"nvim-telescope/telescope.nvim",
 		tag = "0.1.6",
 		requires = { { "nvim-lua/plenary.nvim" } },
 		config = function()
-			require("telescope").setup {
+			require("telescope").setup({
 				defaults = {
 					file_ignore_patterns = {
 						"node_modules",
 						"target",
-						"nvim_sessions",
-					}
-				}
-			}
-		end
+						".nvim_sessions",
+					},
+				},
+			})
+		end,
+	})
 
-	}
+	use({
+		"rmagatti/auto-session",
+		config = function()
+			require("auto-session").setup({
+				suppressed_dirs = { "~/", "~/Downloads", "/" },
+				auto_session_enabled = true,
+				auto_restore_last_session = false,
+				cwd_change_handling = true,
+			})
+		end,
+	})
 
 	use({
 		"rose-pine/neovim",
 		as = "rose-pine",
 		config = function()
 			vim.cmd("colorscheme rose-pine")
-		end
+		end,
 	})
 
-	use(
-		"nvim-treesitter/nvim-treesitter",
-		{
-			run = ":TSUpdate"
-		}
-	)
+	use("nvim-treesitter/nvim-treesitter", {
+		run = ":TSUpdate",
+	})
 
-	use "mbbill/undotree"
+	use("mbbill/undotree")
 
-	use {
-		'VonHeikemen/lsp-zero.nvim',
-		branch = 'v2.x',
+	use({
+		"VonHeikemen/lsp-zero.nvim",
+		branch = "v2.x",
 		requires = {
-			{ 'neovim/nvim-lspconfig' },          -- Required
-			{ 'williamboman/mason.nvim' },        -- Optional
-			{ 'williamboman/mason-lspconfig.nvim' }, -- Optional
+			{ "neovim/nvim-lspconfig" }, -- Required
+			{ "williamboman/mason.nvim" }, -- Optional
+			{ "williamboman/mason-lspconfig.nvim" }, -- Optional
 
 			-- Autocompletion
-			{ 'hrsh7th/nvim-cmp' },  -- Required
-			{ 'hrsh7th/cmp-nvim-lsp' }, -- Required
-			{ 'L3MON4D3/LuaSnip' },  -- Required
-		}
-	}
+			{ "hrsh7th/nvim-cmp" }, -- Required
+			{ "hrsh7th/cmp-nvim-lsp" }, -- Required
+			{ "L3MON4D3/LuaSnip" }, -- Required
+		},
+	})
 
-	use 'voldikss/vim-floaterm'
+	use("voldikss/vim-floaterm")
 
-	use {
+	use({
 		"nvim-tree/nvim-tree.lua",
 		requires = {
-			"nvim-tree/nvim-web-devicons"
-		}
-	}
+			"nvim-tree/nvim-web-devicons",
+		},
+	})
 
-	use {
-		"lewis6991/gitsigns.nvim"
-	}
+	use({
+		"lewis6991/gitsigns.nvim",
+	})
 
-	use 'andweeb/presence.nvim'
+	use("andweeb/presence.nvim")
 
-	use {
-		'numToStr/Comment.nvim',
+	use({
+		"numToStr/Comment.nvim",
 		config = function()
-			require('Comment').setup({
+			require("Comment").setup({
 				toggler = {
 					line = "<leader>/",
-				}
+				},
 			})
-		end
-	}
+		end,
+	})
 
-	use {
-		'akinsho/bufferline.nvim',
+	use({
+		"akinsho/bufferline.nvim",
 		tag = "*",
-		requires = 'nvim-tree/nvim-web-devicons',
-	}
+		requires = "nvim-tree/nvim-web-devicons",
+	})
 
-	use {
-		'goolord/alpha-nvim',
+	use({
+		"goolord/alpha-nvim",
 		config = function()
-			require 'alpha'.setup(require 'alpha.themes.dashboard'.config)
-		end
-	}
+			require("alpha").setup(require("alpha.themes.dashboard").config)
+		end,
+	})
 
-  use {
-    'rmagatti/auto-session',
-    config = function()
-      require("auto-session").setup {
-        suppressed_dirs = { "~/", "~/Downloads", "/"},
-      }
-    end
-  }
-
-	use {
+	use({
 		"elentok/format-on-save.nvim",
 		config = function()
 			local formatters = require("format-on-save.formatters")
@@ -110,27 +109,28 @@ return require("packer").startup(function(use)
 				error_notifier = vim_notify,
 				exclude_path_patterns = {
 					"/node_modules/",
-					"/target/"
+					"/target/",
 				},
 				formatter_by_ft = {
-          json = formatters.lsp,
+					json = formatters.lsp,
 					lua = formatters.lsp,
-          markdown = formatters.prettierd,
+					markdown = formatters.prettierd,
 					rust = formatters.lsp,
-          sh = formatters.shfmt,
-          typescript = formatters.prettierd,
+					sh = formatters.shfmt,
+					typescript = formatters.prettierd,
 					yaml = formatters.lsp,
 				},
 				fallback_formatter = {
 					formatters.remove_trailing_whitespace,
 					formatters.remove_trailing_newlines,
 					formatters.prettierd,
+					formatters.shfmt,
 				},
 			})
-		end
-	}
+		end,
+	})
 
-	use {
+	use({
 		"nvimtools/none-ls.nvim",
 		requires = "nvimtools/none-ls-extras.nvim",
 		config = function()
@@ -141,36 +141,36 @@ return require("packer").startup(function(use)
 					null_ls.builtins.completion.spell,
 				},
 			})
-		end
-	}
+		end,
+	})
 
-	use {
+	use({
 		"hrsh7th/cmp-nvim-lsp",
 		config = function()
-			require 'cmp'.setup {
+			require("cmp").setup({
 				sources = {
-					{ name = 'nvim_lsp' }
-				}
-			}
-			local capabilities = require('cmp_nvim_lsp').default_capabilities()
-			require('lspconfig').clangd.setup {
+					{ name = "nvim_lsp" },
+				},
+			})
+			local capabilities = require("cmp_nvim_lsp").default_capabilities()
+			require("lspconfig").clangd.setup({
 				capabilities = capabilities,
-			}
-		end
-	}
+			})
+		end,
+	})
 
-	use {
+	use({
 		"folke/noice.nvim",
 		requires = {
 			"MunifTanjim/nui.nvim",
 			"rcarriga/nvim-notify",
-		}
-	}
+		},
+	})
 
 	use({
 		"kylechui/nvim-surround",
 		config = function()
 			require("nvim-surround").setup({})
-		end
+		end,
 	})
 end)

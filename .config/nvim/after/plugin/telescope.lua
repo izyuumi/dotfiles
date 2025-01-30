@@ -6,7 +6,7 @@ vim.keymap.set('n', '<leader>fk', builtin.keymaps, { desc = "Find keymaps" })
 local telescope = require('telescope')
 telescope.setup({
   defaults = {
-    file_ignore_patterns = { 'node_modules', '.git', 'target' },
+    file_ignore_patterns = { 'node_modules', '.git', 'target', ".nvim_session" },
     vimgrep_arguments = {
       'rg',
       '--color=never',
