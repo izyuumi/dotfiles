@@ -17,3 +17,5 @@ for package in "${cargo_packages[@]}"; do
   echo "Installing $package..."
   cargo install "$package"
 done
+
+rustup component add rust-analyzer

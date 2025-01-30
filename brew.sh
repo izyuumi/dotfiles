@@ -20,6 +20,7 @@ regular_packages=(
   "ripgrep"
   "shfmt"
   "stylua"
+  "helix"
 )
 
 cask_packages=(
