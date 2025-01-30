@@ -1,4 +1,12 @@
 theme = "catppuccin_mocha"
 
-[editor.cursor-shape]
-insert = "bar"
+[editor]
+mouse = false
+line-number = "relative"
+bufferline = "multiple"
+cursor-shape = { insert = "bar" }
+file-picker = { hidden = false }
+
+[keys.normal.space]
+w = ":write"
+t = { l = [":write-all", ":new", ":insert-output lazygit", ":buffer-close!", ":redraw", ":reload-all"] }
