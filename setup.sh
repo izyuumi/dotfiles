@@ -1,16 +1,23 @@
 #!/bin/bash
 
-chmod +x cargo.sh
-chmod +x brew.sh
+current="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-./cargo.sh
-./brew.sh
+# install cargo and brew
+chmod +x "${current}/cargo.sh"
+chmod +x "${current}/brew.sh"
 
-ln -s ./.config ~/
+"${current}/cargo.sh"
+"${current}/brew.sh"
 
-ln -s ./.gitignore_global ~/
+# make symlinks
+ln -s "${current}/.config" ~/
+
+ln -s "${current}/.gitignore_global" ~/
 git config --global core.excludesfile ~/.gitignore_global
 
-ln -s ./ghostty ~/Library/Application\ Support/com.mitchellh.ghostty/config
+ln -s "${current}/ghostty" ~/Library/Application\ Support/com.mitchellh.ghostty/config
 
-source .zshrc
+ln -s "${current}/.zshrc" ~/
+
+# source zshrc
+source ~/.zshrc
