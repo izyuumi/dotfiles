@@ -3,10 +3,18 @@ theme = "catppuccin_mocha"
 [editor]
 mouse = false
 line-number = "relative"
-bufferline = "multiple"
+bufferline = "always"
 cursor-shape = { insert = "bar" }
 file-picker = { hidden = false }
+
+[keys.normal]
+"]" = { b = ":buffer-next" }
+"[" = { b = ":buffer-previous" }
 
 [keys.normal.space]
 w = ":write"
 t = { l = [":write-all", ":new", ":insert-output lazygit", ":buffer-close!", ":redraw", ":reload-all"] }
+o = "file_picker"
+c = ":buffer-close"
+q = ":quit"
+"/" = "toggle_comments"
