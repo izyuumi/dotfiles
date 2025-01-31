@@ -40,6 +40,14 @@ nv() {
   fi
 }
 
+hx() {
+  if [ $# -eq 0 ]; then
+    command hx .
+  else
+    command hx "$@"
+  fi
+}
+
 # Easier navigation: .., ..., ...., ....., ~ and -
 alias ..="cd .."
 alias ...="cd ../.."
