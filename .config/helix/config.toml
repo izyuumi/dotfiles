@@ -1,4 +1,4 @@
-theme = "catppuccin_mocha"
+theme = "mytheme"
 
 [editor]
 mouse = false
@@ -10,6 +10,17 @@ file-picker = { hidden = false }
 [keys.normal]
 "]" = { b = ":buffer-next" }
 "[" = { b = ":buffer-previous" }
+X = "extend_line_above"
+D = [ "extend_to_line_end", "change_selection"]
+"tab" = "goto_next_function"
+"S-tab" = "goto_prev_function"
+C-j = ["extend_to_line_bounds", "delete_selection", "paste_after"]
+C-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
+S-A-down = ["extend_to_line_bounds", "yank", "open_below", "normal_mode", "replace_with_yanked", "collapse_selection"]
+S-A-up = ["extend_to_line_bounds", "yank", "open_above", "normal_mode", "replace_with_yanked", "collapse_selection"]
+
+[keys.select]
+X = "extend_line_above"
 
 [keys.normal.space]
 w = ":write"
@@ -18,3 +29,5 @@ o = "file_picker"
 c = ":buffer-close"
 q = ":quit"
 "/" = "toggle_comments"
+n = ":n"
+C-r = ":config-reload"
