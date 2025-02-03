@@ -9,9 +9,10 @@ require("nvim-tree").setup({
 		},
 	},
 	filters = {
+		dotfiles = false,
+		git_ignored = false,
 		custom = {
 			".DS_Store",
-			".git",
 		},
 	},
 	lazy = false,
