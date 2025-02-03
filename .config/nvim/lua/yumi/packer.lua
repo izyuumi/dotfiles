@@ -173,4 +173,6 @@ return require("packer").startup(function(use)
 			require("nvim-surround").setup({})
 		end,
 	})
+
+	use("xiyaowong/transparent.nvim")
 end)
