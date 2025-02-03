@@ -106,3 +106,5 @@ function shellExit {
     . ~/.zlogout
   fi
 }
+
+eval "$(atuin init zsh)"
