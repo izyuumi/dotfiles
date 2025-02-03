@@ -92,7 +92,7 @@ _G.packer_plugins = {
     url = "https://github.com/goolord/alpha-nvim"
   },
   ["auto-session"] = {
-    config = { "\27LJ\2\n≈\1\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\2B\0\2\1K\0\1\0\20suppressed_dirs\1\0\4\20suppressed_dirs\0\25auto_session_enabled\2\30auto_restore_last_session\1\24cwd_change_handling\2\1\4\0\0\a~/\16~/Downloads\6/\nsetup\17auto-session\frequire\0" },
+    config = { "\27LJ\2\n≈\1\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\2B\0\2\1K\0\1\0\20suppressed_dirs\1\0\4\30auto_restore_last_session\1\24cwd_change_handling\2\20suppressed_dirs\0\25auto_session_enabled\2\1\4\0\0\a~/\16~/Downloads\6/\nsetup\17auto-session\frequire\0" },
     loaded = true,
     path = "/Users/yumiizumi/.local/share/nvim/site/pack/packer/start/auto-session",
     url = "https://github.com/rmagatti/auto-session"
@@ -109,7 +109,7 @@ _G.packer_plugins = {
     url = "https://github.com/hrsh7th/cmp-nvim-lsp"
   },
   ["format-on-save.nvim"] = {
-    config = { "\27LJ\2\nÈ\4\0\0\a\0\24\0*6\0\0\0'\2\1\0B\0\2\0026\1\0\0'\3\2\0B\1\2\0026\2\0\0'\4\3\0B\2\2\0029\2\4\0025\4\5\0=\1\6\0045\5\a\0=\5\b\0045\5\n\0009\6\t\0=\6\v\0059\6\t\0=\6\f\0059\6\r\0=\6\14\0059\6\t\0=\6\15\0059\6\16\0=\6\17\0059\6\r\0=\6\18\0059\6\t\0=\6\19\5=\5\20\0044\5\5\0009\6\21\0>\6\1\0059\6\22\0>\6\2\0059\6\r\0>\6\3\0059\6\16\0>\6\4\5=\5\23\4B\2\2\1K\0\1\0\23fallback_formatter\29remove_trailing_newlines\31remove_trailing_whitespace\20formatter_by_ft\tyaml\15typescript\ash\nshfmt\trust\rmarkdown\14prettierd\blua\tjson\1\0\a\rmarkdown\0\blua\0\tyaml\0\15typescript\0\tjson\0\ash\0\trust\0\blsp\26exclude_path_patterns\1\3\0\0\19/node_modules/\r/target/\19error_notifier\1\0\4\26exclude_path_patterns\0\19error_notifier\0\20formatter_by_ft\0\23fallback_formatter\0\nsetup\19format-on-save.format-on-save.error-notifiers.vim-notify\30format-on-save.formatters\frequire\0" },
+    config = { "\27LJ\2\nÈ\4\0\0\a\0\24\0*6\0\0\0'\2\1\0B\0\2\0026\1\0\0'\3\2\0B\1\2\0026\2\0\0'\4\3\0B\2\2\0029\2\4\0025\4\5\0=\1\6\0045\5\a\0=\5\b\0045\5\n\0009\6\t\0=\6\v\0059\6\t\0=\6\f\0059\6\r\0=\6\14\0059\6\t\0=\6\15\0059\6\16\0=\6\17\0059\6\r\0=\6\18\0059\6\t\0=\6\19\5=\5\20\0044\5\5\0009\6\21\0>\6\1\0059\6\22\0>\6\2\0059\6\r\0>\6\3\0059\6\16\0>\6\4\5=\5\23\4B\2\2\1K\0\1\0\23fallback_formatter\29remove_trailing_newlines\31remove_trailing_whitespace\20formatter_by_ft\tyaml\15typescript\ash\nshfmt\trust\rmarkdown\14prettierd\blua\tjson\1\0\a\tjson\0\trust\0\ash\0\rmarkdown\0\tyaml\0\blua\0\15typescript\0\blsp\26exclude_path_patterns\1\3\0\0\19/node_modules/\r/target/\19error_notifier\1\0\4\19error_notifier\0\20formatter_by_ft\0\23fallback_formatter\0\26exclude_path_patterns\0\nsetup\19format-on-save.format-on-save.error-notifiers.vim-notify\30format-on-save.formatters\frequire\0" },
     loaded = true,
     path = "/Users/yumiizumi/.local/share/nvim/site/pack/packer/start/format-on-save.nvim",
     url = "https://github.com/elentok/format-on-save.nvim"
@@ -236,10 +236,22 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
+-- Config for: cmp-nvim-lsp
+time([[Config for cmp-nvim-lsp]], true)
+try_loadstring("\27LJ\2\nÔ\1\0\0\5\0\f\0\0246\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0004\3\3\0005\4\3\0>\4\1\3=\3\5\2B\0\2\0016\0\0\0'\2\6\0B\0\2\0029\0\a\0B\0\1\0026\1\0\0'\3\b\0B\1\2\0029\1\t\0019\1\2\0015\3\n\0=\0\v\3B\1\2\1K\0\1\0\17capabilities\1\0\1\17capabilities\0\vclangd\14lspconfig\25default_capabilities\17cmp_nvim_lsp\fsources\1\0\1\fsources\0\1\0\1\tname\rnvim_lsp\nsetup\bcmp\frequire\0", "config", "cmp-nvim-lsp")
+time([[Config for cmp-nvim-lsp]], false)
+-- Config for: telescope.nvim
+time([[Config for telescope.nvim]], true)
+try_loadstring("\27LJ\2\n∂\1\0\0\5\0\b\0\v6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\6\0005\3\4\0005\4\3\0=\4\5\3=\3\a\2B\0\2\1K\0\1\0\rdefaults\1\0\1\rdefaults\0\25file_ignore_patterns\1\0\1\25file_ignore_patterns\0\1\4\0\0\17node_modules\vtarget\19.nvim_sessions\nsetup\14telescope\frequire\0", "config", "telescope.nvim")
+time([[Config for telescope.nvim]], false)
 -- Config for: format-on-save.nvim
 time([[Config for format-on-save.nvim]], true)
-try_loadstring("\27LJ\2\nÈ\4\0\0\a\0\24\0*6\0\0\0'\2\1\0B\0\2\0026\1\0\0'\3\2\0B\1\2\0026\2\0\0'\4\3\0B\2\2\0029\2\4\0025\4\5\0=\1\6\0045\5\a\0=\5\b\0045\5\n\0009\6\t\0=\6\v\0059\6\t\0=\6\f\0059\6\r\0=\6\14\0059\6\t\0=\6\15\0059\6\16\0=\6\17\0059\6\r\0=\6\18\0059\6\t\0=\6\19\5=\5\20\0044\5\5\0009\6\21\0>\6\1\0059\6\22\0>\6\2\0059\6\r\0>\6\3\0059\6\16\0>\6\4\5=\5\23\4B\2\2\1K\0\1\0\23fallback_formatter\29remove_trailing_newlines\31remove_trailing_whitespace\20formatter_by_ft\tyaml\15typescript\ash\nshfmt\trust\rmarkdown\14prettierd\blua\tjson\1\0\a\rmarkdown\0\blua\0\tyaml\0\15typescript\0\tjson\0\ash\0\trust\0\blsp\26exclude_path_patterns\1\3\0\0\19/node_modules/\r/target/\19error_notifier\1\0\4\26exclude_path_patterns\0\19error_notifier\0\20formatter_by_ft\0\23fallback_formatter\0\nsetup\19format-on-save.format-on-save.error-notifiers.vim-notify\30format-on-save.formatters\frequire\0", "config", "format-on-save.nvim")
+try_loadstring("\27LJ\2\nÈ\4\0\0\a\0\24\0*6\0\0\0'\2\1\0B\0\2\0026\1\0\0'\3\2\0B\1\2\0026\2\0\0'\4\3\0B\2\2\0029\2\4\0025\4\5\0=\1\6\0045\5\a\0=\5\b\0045\5\n\0009\6\t\0=\6\v\0059\6\t\0=\6\f\0059\6\r\0=\6\14\0059\6\t\0=\6\15\0059\6\16\0=\6\17\0059\6\r\0=\6\18\0059\6\t\0=\6\19\5=\5\20\0044\5\5\0009\6\21\0>\6\1\0059\6\22\0>\6\2\0059\6\r\0>\6\3\0059\6\16\0>\6\4\5=\5\23\4B\2\2\1K\0\1\0\23fallback_formatter\29remove_trailing_newlines\31remove_trailing_whitespace\20formatter_by_ft\tyaml\15typescript\ash\nshfmt\trust\rmarkdown\14prettierd\blua\tjson\1\0\a\tjson\0\trust\0\ash\0\rmarkdown\0\tyaml\0\blua\0\15typescript\0\blsp\26exclude_path_patterns\1\3\0\0\19/node_modules/\r/target/\19error_notifier\1\0\4\19error_notifier\0\20formatter_by_ft\0\23fallback_formatter\0\26exclude_path_patterns\0\nsetup\19format-on-save.format-on-save.error-notifiers.vim-notify\30format-on-save.formatters\frequire\0", "config", "format-on-save.nvim")
 time([[Config for format-on-save.nvim]], false)
+-- Config for: rose-pine
+time([[Config for rose-pine]], true)
+try_loadstring("\27LJ\2\n9\0\0\3\0\3\0\0056\0\0\0009\0\1\0'\2\2\0B\0\2\1K\0\1\0\26colorscheme rose-pine\bcmd\bvim\0", "config", "rose-pine")
+time([[Config for rose-pine]], false)
 -- Config for: alpha-nvim
 time([[Config for alpha-nvim]], true)
 try_loadstring("\27LJ\2\na\0\0\5\0\5\0\n6\0\0\0'\2\1\0B\0\2\0029\0\2\0006\2\0\0'\4\3\0B\2\2\0029\2\4\2B\0\2\1K\0\1\0\vconfig\27alpha.themes.dashboard\nsetup\nalpha\frequire\0", "config", "alpha-nvim")
@@ -250,7 +262,7 @@ try_loadstring("\27LJ\2\n?\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B
 time([[Config for nvim-surround]], false)
 -- Config for: auto-session
 time([[Config for auto-session]], true)
-try_loadstring("\27LJ\2\n≈\1\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\2B\0\2\1K\0\1\0\20suppressed_dirs\1\0\4\20suppressed_dirs\0\25auto_session_enabled\2\30auto_restore_last_session\1\24cwd_change_handling\2\1\4\0\0\a~/\16~/Downloads\6/\nsetup\17auto-session\frequire\0", "config", "auto-session")
+try_loadstring("\27LJ\2\n≈\1\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\2B\0\2\1K\0\1\0\20suppressed_dirs\1\0\4\30auto_restore_last_session\1\24cwd_change_handling\2\20suppressed_dirs\0\25auto_session_enabled\2\1\4\0\0\a~/\16~/Downloads\6/\nsetup\17auto-session\frequire\0", "config", "auto-session")
 time([[Config for auto-session]], false)
 -- Config for: none-ls.nvim
 time([[Config for none-ls.nvim]], true)
@@ -260,18 +272,6 @@ time([[Config for none-ls.nvim]], false)
 time([[Config for Comment.nvim]], true)
 try_loadstring("\27LJ\2\ng\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\2B\0\2\1K\0\1\0\ftoggler\1\0\1\ftoggler\0\1\0\1\tline\14<leader>/\nsetup\fComment\frequire\0", "config", "Comment.nvim")
 time([[Config for Comment.nvim]], false)
--- Config for: cmp-nvim-lsp
-time([[Config for cmp-nvim-lsp]], true)
-try_loadstring("\27LJ\2\nÔ\1\0\0\5\0\f\0\0246\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0004\3\3\0005\4\3\0>\4\1\3=\3\5\2B\0\2\0016\0\0\0'\2\6\0B\0\2\0029\0\a\0B\0\1\0026\1\0\0'\3\b\0B\1\2\0029\1\t\0019\1\2\0015\3\n\0=\0\v\3B\1\2\1K\0\1\0\17capabilities\1\0\1\17capabilities\0\vclangd\14lspconfig\25default_capabilities\17cmp_nvim_lsp\fsources\1\0\1\fsources\0\1\0\1\tname\rnvim_lsp\nsetup\bcmp\frequire\0", "config", "cmp-nvim-lsp")
-time([[Config for cmp-nvim-lsp]], false)
--- Config for: telescope.nvim
-time([[Config for telescope.nvim]], true)
-try_loadstring("\27LJ\2\n∂\1\0\0\5\0\b\0\v6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\6\0005\3\4\0005\4\3\0=\4\5\3=\3\a\2B\0\2\1K\0\1\0\rdefaults\1\0\1\rdefaults\0\25file_ignore_patterns\1\0\1\25file_ignore_patterns\0\1\4\0\0\17node_modules\vtarget\19.nvim_sessions\nsetup\14telescope\frequire\0", "config", "telescope.nvim")
-time([[Config for telescope.nvim]], false)
--- Config for: rose-pine
-time([[Config for rose-pine]], true)
-try_loadstring("\27LJ\2\n9\0\0\3\0\3\0\0056\0\0\0009\0\1\0'\2\2\0B\0\2\1K\0\1\0\26colorscheme rose-pine\bcmd\bvim\0", "config", "rose-pine")
-time([[Config for rose-pine]], false)
 
 _G._packer.inside_compile = false
 if _G._packer.needs_bufread == true then
