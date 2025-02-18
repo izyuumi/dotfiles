@@ -11,6 +11,7 @@ cargo_packages=(
   "eza"
   "cargo-watch"
   "cargo-generate"
+  "cargo-bloat"
 )
 
 for package in "${cargo_packages[@]}"; do
