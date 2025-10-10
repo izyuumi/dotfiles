@@ -15,7 +15,6 @@ require("nvim-tree").setup({
 			".DS_Store",
 		},
 	},
-	lazy = false,
 	update_cwd = false,
 })
 

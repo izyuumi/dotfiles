@@ -1,6 +1,9 @@
-background-opacity = 0.9
+background-opacity = 0.93
 mouse-hide-while-typing = true
 font-family = "Hack Nerd Font"
-theme = Raycast_Dark
+#theme = dark:Raycast_Dark
 macos-auto-secure-input = true
 quit-after-last-window-closed = true
+keybind = shift+enter=text:\n
+clipboard-write = allow
+clipboard-read  = ask
