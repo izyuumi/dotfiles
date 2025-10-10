@@ -1,0 +1,19 @@
+[tasks]
+openhands = """
+docker run -it --rm \
+    -e SANDBOX_RUNTIME_CONTAINER_IMAGE=docker.all-hands.dev/all-hands-ai/runtime:0.48-nikolaik \
+    -e LOG_ALL_EVENTS=true \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v ~/.openhands:/.openhands \
+    -p 3000:3000 \
+    --add-host host.docker.internal:host-gateway \
+    --name openhands-app \
+    docker.all-hands.dev/all-hands-ai/openhands:0.48
+"""
+
+openwebui = """
+docker run -d --network=host -p 51433:8080 -e 'OLLAMA_BASE_URL=http://10.1.201.32:3000/v1' -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main
+"""
+
+[settings]
+idiomatic_version_file_enable_tools = []
