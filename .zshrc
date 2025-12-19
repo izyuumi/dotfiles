@@ -107,6 +107,7 @@ function shellExit {
 }
 
 eval "$(atuin init zsh)"
+eval "$(zoxide init zsh --cmd cd)"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -124,74 +125,74 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # opencode
 export PATH=/Users/yumiizumi/.opencode/bin:$PATH
 
-# -- zellij helpers that avoid nesting and switch sessions when already inside zellij --
+# -- tmux helpers that avoid nesting and switch sessions when already inside tmux --
 
-# z [name] -> attach/create session (outside zellij) OR switch to it (inside zellij)
-z() {
+# t [name] -> attach/create session (outside tmux) OR switch to it (inside tmux)
+t() {
   local n="${1:-$(basename "${PWD%/}")}"
-  if [ -n "$ZELLIJ" ]; then
-    zellij action switch-mode normal
-    if zellij list-sessions 2>/dev/null | grep -q "^$n$"; then
-      zellij action switch-session "$n"
+
+  if [ -n "$TMUX" ]; then
+    if tmux has-session -t "$n" 2>/dev/null; then
+      tmux switch-client -t "$n"
     else
-      zellij action new-tab --name "$n"
+      tmux new-session -d -s "$n" && tmux switch-client -t "$n"
     fi
   else
-    if zellij list-sessions 2>/dev/null | grep -q "^$n$"; then
-      zellij attach "$n"
+    if tmux has-session -t "$n" 2>/dev/null; then
+      tmux attach -t "$n"
     else
-      zellij -s "$n"
+      tmux new-session -s "$n"
     fi
   fi
 }
 
-# zls -> list sessions
-zls() {
-  zellij list-sessions 2>/dev/null || echo "(no sessions)"
+# tls -> list sessions
+tls() {
+  tmux list-sessions 2>/dev/null || echo "(no sessions)"
 }
 
-# zk <name> -> kill a session
-zk() {
+# tk <name> -> kill a session
+tk() {
   if [ -z "$1" ]; then
-    echo "Usage: zk <session>"
+    echo "Usage: tk <session>"
     return 1
   fi
 
-  if [ -n "$ZELLIJ" ]; then
+  if [ -n "$TMUX" ]; then
     local current
-    current="$(zellij list-sessions 2>/dev/null | grep "(current)" | awk '{print $1}')"
+    current="$(tmux display-message -p '#S')"
     if [ "$1" = "$current" ]; then
       local fallback
-      fallback="$(zellij list-sessions 2>/dev/null | grep -v "(current)" | head -n1 | awk '{print $1}')"
-      [ -n "$fallback" ] && zellij action switch-session "$fallback"
+      fallback="$(tmux list-sessions -F '#S' 2>/dev/null | grep -v "^${current}$" | head -n1)"
+      [ -n "$fallback" ] && tmux switch-client -t "$fallback"
     fi
   fi
 
-  zellij delete-session "$1" 2>/dev/null || zellij kill-session "$1" 2>/dev/null
+  tmux kill-session -t "$1" 2>/dev/null
 }
 
 autoload -Uz compinit
 compinit
 
-_z_complete_sessions() {
+_t_complete_sessions() {
   if [[ $CURRENT -ne 2 ]]; then
     return
   fi
-  
+
   local -a sessions
-  sessions=(${(f)"$(zellij list-sessions 2>/dev/null | sed 's/\x1b\[[0-9;]*m//g' | awk '{print $1}')"})
+  sessions=(${(f)"$(tmux list-sessions -F '#S' 2>/dev/null)"})
   if [[ ${#sessions[@]} -gt 0 ]]; then
-    _describe 'zellij session' sessions
+    _describe 'tmux session' sessions
   fi
 }
 
-compdef _z_complete_sessions z
-compdef _z_complete_sessions zk
+compdef _t_complete_sessions t
+compdef _t_complete_sessions tk
 
 alias claude-kimi="ANTHROPIC_AUTH_TOKEN=rutilea2025 ANTHROPIC_BASE_URL=http://100.100.2.65:4000 claude --model kimi-k2"
-alias yolo-kimi="IS_SANDBOX=1 ANTHROPIC_AUTH_TOKEN=rutilea2025 ANTHROPIC_BASE_URL=http://100.100.2.201.65:4000 claude --model kimi-k2 --dangerously-skip-permissions"
+alias yolo-kimi="IS_SANDBOX=1 ANTHROPIC_AUTH_TOKEN=rutilea2025 ANTHROPIC_BASE_URL=http://100.100.2.65:4000 claude --model kimi-k2 --dangerously-skip-permissions"
 alias yolo-ds="IS_SANDBOX=1 ANTHROPIC_AUTH_TOKEN=rutilea2025 ANTHROPIC_BASE_URL=http://100.100.2.65:4000 claude --model deepseek --dangerously-skip-permissions"
-alias yolo-dsr="IS_SANDBOX=1 ANTHROPIC_AUTH_TOKEN=rutilea2025 ANTHROPIC_BASE_URL=http://100.100.2.65:4000 claude --model deepseek-reasoning --dangerously-skip-permissions"
+alias yolo-ds31="IS_SANDBOX=1 ANTHROPIC_AUTH_TOKEN=rutilea2025 ANTHROPIC_BASE_URL=http://100.100.2.65:4000 claude --model ds31 --dangerously-skip-permissions"
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
@@ -199,3 +200,7 @@ export SDKMAN_DIR="$HOME/.sdkman"
 export PATH="$HOME/.local/bin:$PATH"
 
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# Added by Antigravity
+export PATH="/Users/yumiizumi/.antigravity/antigravity/bin:$PATH"
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
