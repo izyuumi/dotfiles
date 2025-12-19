@@ -40,6 +40,7 @@ regular_packages=(
   "yazi"
   "yt-dlp"
   "zellij"
+  "zoxide"
   "zsh-autosuggestions"
 )
 
