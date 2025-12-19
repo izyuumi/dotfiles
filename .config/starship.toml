@@ -2,9 +2,8 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 format = '''
-[┌───────────────────>](bold blue)
-[│](bold blue)$os$username$hostname$directory$rust$nodejs$deno$time
-[└─>](bold blue) '''
+$os$username$hostname$directory$git_branch$git_status
+$status$character'''
 
 # Disable the package module, hiding it from the prompt completely
 [package]
@@ -21,8 +20,19 @@ show_always = true
 ssh_only = true
 format = "[ssh:$hostname](bold red) "
 
-[time]
-disabled = false
-
 [os]
 disabled = false
+
+[git_branch]
+format = "[$symbol$branch]($style) "
+
+[git_status]
+format = "[$all_status$ahead_behind]($style) "
+
+[status]
+disabled = false
+format = "[exit:$status](bold red) "
+
+[character]
+success_symbol = "[❯](bold blue) "
+error_symbol = "[❯](bold red) "
