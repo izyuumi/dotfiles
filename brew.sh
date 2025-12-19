@@ -36,7 +36,6 @@ regular_packages=(
   "tree-sitter"
   "typescript"
   "uv"
-  "yabai"
   "yazi"
   "yt-dlp"
   "zellij"

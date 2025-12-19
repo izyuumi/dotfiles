@@ -3,7 +3,7 @@
 
 format = '''
 [┌───────────────────>](bold blue)
-[│](bold blue)$os$username$directory$rust$nodejs$deno$time
+[│](bold blue)$os$username$hostname$directory$rust$nodejs$deno$time
 [└─>](bold blue) '''
 
 # Disable the package module, hiding it from the prompt completely
@@ -16,6 +16,10 @@ fish_style_pwd_dir_length = 1
 
 [username]
 show_always = true
+
+[hostname]
+ssh_only = true
+format = "[ssh:$hostname](bold red) "
 
 [time]
 disabled = false
