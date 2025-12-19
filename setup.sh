@@ -76,8 +76,6 @@ link_item "${current}/.zshrc" "$HOME/.zshrc"
 # Tmux config
 link_item "${current}/.tmux.conf" "$HOME/.tmux.conf"
 
-# Yabai config
-link_item "${current}/.yabairc" "$HOME/.yabairc"
 
 echo "✅ Dotfiles setup complete!"
 echo "💡 Run 'source ~/.zshrc' to reload your shell configuration"
