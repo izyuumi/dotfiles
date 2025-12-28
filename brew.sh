@@ -38,7 +38,6 @@ regular_packages=(
   "uv"
   "yazi"
   "yt-dlp"
-  "zellij"
   "zoxide"
   "zsh-autosuggestions"
 )

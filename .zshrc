@@ -27,8 +27,8 @@ function fs() {
   fi
 }
 
-export EDITOR="nvim"
-export VISUAL="nvim"
+export EDITOR="vim"
+export VISUAL="vim"
 
 function o() {
   if [ $# -eq 0 ]; then
@@ -40,9 +40,9 @@ function o() {
 
 nv() {
   if [ $# -eq 0 ]; then
-    command nvim .
+    command vim .
   else
-    command nvim "$@"
+    command vim "$@"
   fi
 }
 
@@ -129,25 +129,23 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # opencode
 export PATH=/Users/yumiizumi/.opencode/bin:$PATH
 
-# -- tmux helpers that avoid nesting and switch sessions when already inside tmux --
+# -- tmux helpers --
 
-# t [name] -> attach/create session (outside tmux) OR switch to it (inside tmux)
+# t [name] -> attach/create session (outside tmux)
 t() {
   local n="${1:-$(basename "${PWD%/}")}"
 
   if [ -n "$TMUX" ]; then
-    if tmux has-session -t "$n" 2>/dev/null; then
-      tmux switch-client -t "$n"
-    else
-      tmux new-session -d -s "$n" && tmux switch-client -t "$n"
+    local current
+    current="$(tmux display-message -p '#S' 2>/dev/null)"
+    if [ -n "$current" ] && [ "$n" = "$current" ]; then
+      return 0
     fi
-  else
-    if tmux has-session -t "$n" 2>/dev/null; then
-      tmux attach -t "$n"
-    else
-      tmux new-session -s "$n"
-    fi
+    echo "Already inside tmux (${current:-unknown}); open a new terminal to attach to '$n'."
+    return 1
   fi
+
+  tmux new-session -A -s "$n"
 }
 
 # tls -> list sessions
@@ -164,11 +162,10 @@ tk() {
 
   if [ -n "$TMUX" ]; then
     local current
-    current="$(tmux display-message -p '#S')"
-    if [ "$1" = "$current" ]; then
-      local fallback
-      fallback="$(tmux list-sessions -F '#S' 2>/dev/null | grep -v "^${current}$" | head -n1)"
-      [ -n "$fallback" ] && tmux switch-client -t "$fallback"
+    current="$(tmux display-message -p '#S' 2>/dev/null)"
+    if [ -n "$current" ] && [ "$1" = "$current" ]; then
+      echo "Refusing to kill current tmux session '$1'."
+      return 1
     fi
   fi
 
@@ -210,3 +207,9 @@ export PATH="/Users/yumiizumi/.antigravity/antigravity/bin:$PATH"
 if [ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
   source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
+# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+fpath=(/Users/yumi/.docker/completions $fpath)
+autoload -Uz compinit
+compinit
+# End of Docker CLI completions
+export PATH="$HOME/.local/bin:$PATH"
