@@ -58,7 +58,7 @@ echo "🔗 Creating symlinks..."
 mkdir -p ~/.config
 
 # Individual config directories/files
-for config_dir in atuin gh karabiner mise nvim starship.toml uv yazi yt-dlp zed zellij; do
+for config_dir in atuin gh karabiner mise nvim starship.toml uv yazi yt-dlp zed; do
   link_item "${current}/.config/$config_dir" "$HOME/.config/$config_dir"
 done
 
