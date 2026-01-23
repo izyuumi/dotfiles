@@ -31,8 +31,8 @@ format = "[$all_status$ahead_behind]($style) "
 
 [status]
 disabled = false
-format = "[exit:$status](bold red) "
+format = "[exit:$status](bold red)\n"
 
 [character]
 success_symbol = "[❯](bold blue)"
-error_symbol = "[❯](bold red)"
+error_symbol = "[❯](bold blue)"
