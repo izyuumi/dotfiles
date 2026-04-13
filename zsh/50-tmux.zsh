@@ -1,6 +1,6 @@
 # t [name] -> attach/create session (outside tmux)
 t() {
-  local name="${1:-$(basename "${PWD%/}")}"
+  local name="${1:-yumi}"
 
   if [[ -n "$TMUX" ]]; then
     local current
