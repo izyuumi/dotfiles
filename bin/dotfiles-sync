@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# Pull-only dotfiles sync. Safe: --rebase --autostash, abort on conflict.
+# Opt-in via launchd plist per machine. No auto-commit, no auto-push.
+
+set -uo pipefail
+
+REPO="${DOTFILES_DIR:-$HOME/dotfiles}"
+LOG="$REPO/.sync.log"
+BRANCH="main"
+
+ts() { date +"%Y-%m-%d %H:%M:%S"; }
+log() { printf '[%s] %s\n' "$(ts)" "$*" >>"$LOG"; }
+notify() {
+  /usr/bin/osascript -e "display notification \"$1\" with title \"dotfiles-sync\"" 2>/dev/null || true
+}
+
+cd "$REPO" 2>/dev/null || { log "repo missing: $REPO"; exit 1; }
+
+# Network reachable?
+if ! /usr/bin/curl -fsI --max-time 5 https://github.com >/dev/null 2>&1; then
+  log "github unreachable, skip"
+  exit 0
+fi
+
+# Fetch first, compare.
+if ! /usr/bin/git fetch --quiet origin "$BRANCH" 2>>"$LOG"; then
+  log "fetch failed"
+  exit 1
+fi
+
+LOCAL=$(/usr/bin/git rev-parse "$BRANCH" 2>/dev/null || echo "")
+REMOTE=$(/usr/bin/git rev-parse "origin/$BRANCH" 2>/dev/null || echo "")
+
+if [ "$LOCAL" = "$REMOTE" ]; then
+  exit 0  # already current, silent
+fi
+
+log "remote ahead: $LOCAL -> $REMOTE"
+
+if ! /usr/bin/git pull --rebase --autostash --quiet origin "$BRANCH" 2>>"$LOG"; then
+  log "pull failed (conflict or rebase abort)"
+  /usr/bin/git rebase --abort 2>/dev/null || true
+  notify "pull conflict — resolve manually"
+  exit 1
+fi
+
+NEW=$(/usr/bin/git rev-parse "$BRANCH")
+log "updated: $LOCAL -> $NEW"
+notify "synced to $(/usr/bin/git log -1 --pretty=%s)"
