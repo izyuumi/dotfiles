@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+# Install + load the dotfiles-sync launchd agent on this Mac.
+# Idempotent: safe to re-run. Opt-in per machine — just don't run this
+# on Macs you don't want auto-syncing.
+
+set -euo pipefail
+
+LABEL="com.izyuumi.dotfiles-sync"
+REPO="${DOTFILES_DIR:-$HOME/dotfiles}"
+SYNC_BIN="$REPO/bin/dotfiles-sync"
+AGENTS_DIR="$HOME/Library/LaunchAgents"
+PLIST="$AGENTS_DIR/$LABEL.plist"
+UID_NUM="$(id -u)"
+
+if [ ! -x "$SYNC_BIN" ]; then
+  echo "error: $SYNC_BIN missing or not executable" >&2
+  exit 1
+fi
+
+mkdir -p "$AGENTS_DIR"
+
+# Unload existing agent if already loaded — so we can overwrite safely.
+if launchctl print "gui/$UID_NUM/$LABEL" >/dev/null 2>&1; then
+  echo "unloading existing agent..."
+  launchctl bootout "gui/$UID_NUM/$LABEL" 2>/dev/null || true
+fi
+
+# Generate plist with this Mac's paths.
+cat >"$PLIST" <<PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>$LABEL</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>$SYNC_BIN</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>StartInterval</key>
+    <integer>3600</integer>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <key>HOME</key>
+        <string>$HOME</string>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>$REPO/.sync.stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>$REPO/.sync.stderr.log</string>
+
+    <key>ProcessType</key>
+    <string>Background</string>
+</dict>
+</plist>
+PLIST
+
+chmod 644 "$PLIST"
+
+echo "installed plist: $PLIST"
+
+launchctl bootstrap "gui/$UID_NUM" "$PLIST"
+
+echo "loaded agent: $LABEL"
+echo
+echo "verify:   launchctl print gui/$UID_NUM/$LABEL | head"
+echo "logs:     tail -f $REPO/.sync.log"
+echo "disable:  $REPO/bin/dotfiles-sync-uninstall"
