@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Disable + remove the dotfiles-sync launchd agent on this Mac.
+
+set -euo pipefail
+
+LABEL="com.izyuumi.dotfiles-sync"
+PLIST="$HOME/Library/LaunchAgents/$LABEL.plist"
+UID_NUM="$(id -u)"
+
+if launchctl print "gui/$UID_NUM/$LABEL" >/dev/null 2>&1; then
+  launchctl bootout "gui/$UID_NUM/$LABEL" 2>/dev/null || true
+  echo "agent unloaded"
+else
+  echo "agent not loaded"
+fi
+
+if [ -f "$PLIST" ]; then
+  rm -f "$PLIST"
+  echo "plist removed: $PLIST"
+else
+  echo "plist not present"
+fi
