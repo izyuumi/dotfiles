@@ -2,3 +2,4 @@
 .sync.log
 .sync.stdout.log
 .sync.stderr.log
+.zcompdump*

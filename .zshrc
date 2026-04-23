@@ -28,6 +28,20 @@ if command -v starship >/dev/null 2>&1; then
   eval "$(starship init zsh)"
 fi
 
+autoload -Uz add-zsh-hook
+
+set_terminal_title() {
+  [[ -o interactive ]] || return 0
+
+  local title_host title_path
+  title_host="${HOST%%.*}"
+  title_path="$(print -Pn '%~')"
+
+  printf '\033]2;%s:%s\007' "$title_host" "$title_path"
+}
+
+add-zsh-hook precmd set_terminal_title
+
 # ---------- functions ----------
 # Ensure SSH agent forwarding works in shells where SSH_AUTH_SOCK is unset.
 if [[ -z "$SSH_AUTH_SOCK" ]]; then
