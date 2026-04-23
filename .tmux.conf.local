@@ -1,0 +1,62 @@
+# =============================================================================
+#  tmux.conf.local
+#  Personal overrides and theme customizations layered on top of ~/.tmux.conf.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Theme knobs
+# -----------------------------------------------------------------------------
+set -g @theme-bg             'colour235'
+set -g @theme-muted          'colour244'
+set -g @theme-text           'colour252'
+set -g @theme-accent         'green'
+set -g @theme-warning        'colour220'
+set -g @theme-danger         'colour196'
+set -g @theme-session-fg     'colour16'
+set -g @theme-sub-separator  '·'
+set -g @theme-left-separator ''
+set -g @theme-right-separator ''
+set -g @status-indicator-prefix '#[fg=colour16,bg=colour220,bold] PREFIX #[default]'
+set -g @status-indicator-mouse  '#[fg=colour16,bg=green,bold] MOUSE #[default]'
+set -g @status-indicator-sync   '#[fg=colour16,bg=colour196,bold] SYNC #[default]'
+set -g @status-indicator-root   '#[fg=colour16,bg=colour196,bold] ROOT #[default]'
+
+# Uncomment these if your terminal font includes Powerline / Nerd Font glyphs.
+# set -g @theme-left-separator  ''
+# set -g @theme-right-separator ''
+# set -g @theme-sub-separator   ''
+
+
+# -----------------------------------------------------------------------------
+# Theme application
+# -----------------------------------------------------------------------------
+set -g status-position      top
+set -g status-interval      5
+set -g status-left-length   32
+set -g status-right-length  120
+set -g set-titles           on
+set -g set-titles-string    '#h ❐ #S ● #I #W'
+
+set -g status-style          'fg=colour244,bg=colour235'
+set -g message-style         'fg=colour16,bg=colour220,bold'
+set -g message-command-style 'fg=colour220,bg=colour235,bold'
+set -g mode-style            'fg=colour16,bg=colour220,bold'
+
+set -g status-left '#[fg=#{@theme-session-fg},bg=#{@theme-accent},bold] #S #[fg=#{@theme-accent},bg=#{@theme-bg}]#{@theme-left-separator}#[default]'
+set -g status-right '#{?client_prefix,#{@status-indicator-prefix},}#{?mouse,#{@status-indicator-mouse},}#{?pane_synchronized,#{@status-indicator-sync},}#(if [ \"$(id -u)\" -eq 0 ]; then printf "%s" "#{@status-indicator-root}"; fi)#[fg=#{@theme-muted}]#(git -C "#{pane_current_path}" rev-parse --abbrev-ref HEAD 2>/dev/null) #[fg=#{@theme-muted}]#{@theme-sub-separator} #[fg=#{@theme-text}]#{s|^'$HOME'|~|:pane_current_path} #[fg=#{@theme-danger}]#{@theme-sub-separator} #[fg=#{@theme-danger},bold]%Y-%m-%dT%H:%M#[default]'
+
+setw -g window-status-format         ' #I:#W '
+setw -g window-status-current-format ' #I:#W#{?window_flags,#{window_flags},} '
+setw -g window-status-style          'fg=colour244,bg=colour235'
+setw -g window-status-current-style  'fg=colour16,bg=green,bold'
+setw -g window-status-activity-style 'fg=colour220,bg=colour235,bold'
+setw -g window-status-bell-style     'fg=colour16,bg=colour196,bold'
+
+set -g pane-border-status       top
+set -g pane-border-format       '#[bold]#P#[default]#{?pane_@issue,   #{pane_@issue},}'
+set -g pane-border-style        'fg=colour238'
+set -g pane-active-border-style 'fg=green'
+
+# Focus the active pane by dimming inactive ones.
+set -g window-style        'bg=colour236'
+set -g window-active-style 'bg=default'

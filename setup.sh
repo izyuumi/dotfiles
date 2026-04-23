@@ -76,6 +76,11 @@ link_item "${current}/.zprofile" "$HOME/.zprofile"
 
 # Tmux config
 link_item "${current}/.tmux.conf" "$HOME/.tmux.conf"
+link_item "${current}/.tmux.conf.local" "$HOME/.tmux.conf.local"
+mkdir -p "$HOME/.tmux/scripts"
+for tmux_script in edit-local-config.sh maximize-pane.sh; do
+  link_item "${current}/.tmux/scripts/$tmux_script" "$HOME/.tmux/scripts/$tmux_script"
+done
 
 
 echo "✅ Dotfiles setup complete!"
