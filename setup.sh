@@ -72,6 +72,7 @@ link_item "${current}/ghostty" "$HOME/Library/Application Support/com.mitchellh.
 
 # Zsh config
 link_item "${current}/.zshrc" "$HOME/.zshrc"
+link_item "${current}/.zprofile" "$HOME/.zprofile"
 
 # Tmux config
 link_item "${current}/.tmux.conf" "$HOME/.tmux.conf"
