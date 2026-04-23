@@ -19,6 +19,14 @@ local_name() {
 
 remote_path_from_title() {
   title=$1
+  title=${title## }
+  title=${title%% }
+
+  case "$title" in
+    *:\ ~*|*:\ /*)
+      title=${title#*: }
+      ;;
+  esac
 
   case "$title" in
     *:~*|*:/*)
