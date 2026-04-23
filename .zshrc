@@ -4,19 +4,20 @@ setopt no_nomatch
 export TERM="xterm-256color"
 export EDITOR="vim"
 export VISUAL="vim"
-export NVM_DIR="$HOME/.nvm"
-export BUN_INSTALL="$HOME/.bun"
-export SDKMAN_DIR="$HOME/.sdkman"
 
 typeset -gU path fpath
 
 path=(
   "$HOME/.local/bin"
-  "$BUN_INSTALL/bin"
   "$HOME/.opencode/bin"
   "$HOME/.antigravity/antigravity/bin"
   $path
 )
+
+# Drop legacy runtime-manager paths that may be inherited from older shells.
+path=(${path:#$HOME/.nvm/versions/node/*/bin})
+path=(${path:#$HOME/.nvm/versions/node/*/lib/node_modules/@openai/codex/node_modules/*/vendor/*/path})
+path=(${path:#$HOME/.bun/bin})
 
 if [[ -n ${HOMEBREW_PREFIX:-} ]]; then
   fpath=("$HOMEBREW_PREFIX/share/zsh/site-functions" $fpath)
@@ -82,7 +83,7 @@ shellExit() {
 
 # ---------- aliases ----------
 alias lg="lazygit"
-alias yolo="CLAUDE_CODE_NO_FLICKER=1 claude --enable-auto-mode"
+alias yolo="CLAUDE_CODE_NO_FLICKER=1 claude --dangerously-skip-permissions"
 alias colo="codex --yolo"
 
 alias ..="cd .."
@@ -122,25 +123,8 @@ if command -v atuin >/dev/null 2>&1; then
   eval "$(atuin init zsh)"
 fi
 
-if [[ -s "$NVM_DIR/nvm.sh" ]]; then
-  . "$NVM_DIR/nvm.sh"
-fi
-
-if [[ -s "$NVM_DIR/bash_completion" ]]; then
-  . "$NVM_DIR/bash_completion"
-fi
-
-if [[ -f "$HOME/.local/bin/env" ]]; then
-  . "$HOME/.local/bin/env"
-fi
-
-if [[ -s "$HOME/.bun/_bun" ]]; then
-  source "$HOME/.bun/_bun"
-fi
-
-if [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]]; then
-  source "$SDKMAN_DIR/bin/sdkman-init.sh"
-fi
+# Let mise manage runtime selection in interactive shells.
+eval "$(/opt/homebrew/bin/mise activate zsh)"
 
 if command -v ssh-add >/dev/null 2>&1; then
   /usr/bin/ssh-add --apple-load-keychain 2>/dev/null
