@@ -3,3 +3,12 @@
 .sync.stdout.log
 .sync.stderr.log
 .zcompdump*
+*.pyc
+__pycache__/
+.config/atuin/atuin-receipt.json
+.config/gh/hosts.yml
+.config/gh/state.yml
+.config/karabiner/automatic_backups/
+.config/nvim/plugin/packer_compiled.lua
+.config/uv/
+.config/yazi/yazi.toml-*

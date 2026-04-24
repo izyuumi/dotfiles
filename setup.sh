@@ -42,6 +42,24 @@ link_item() {
   echo "  ✓ Linked $(basename "$dest")"
 }
 
+ensure_real_directory() {
+  local dir="$1"
+  local temp_dir
+
+  if [ -L "$dir" ] && [ -d "$dir" ]; then
+    temp_dir="$(mktemp -d)"
+    cp -R "$dir/." "$temp_dir/" 2>/dev/null || true
+    rm "$dir"
+    mkdir -p "$dir"
+    cp -R "$temp_dir/." "$dir/" 2>/dev/null || true
+    rm -rf "$temp_dir"
+    echo "  ✓ Migrated $(basename "$dir") to a real directory"
+    return 0
+  fi
+
+  mkdir -p "$dir"
+}
+
 # Install package managers and packages
 echo "📦 Installing Rust toolchain and cargo packages..."
 chmod +x "${current}/cargo.sh"
@@ -57,10 +75,34 @@ echo "🔗 Creating symlinks..."
 # Create .config directory if it doesn't exist
 mkdir -p ~/.config
 
-# Individual config directories/files
-for config_dir in atuin gh karabiner mise nvim starship.toml uv yazi yt-dlp zed; do
-  link_item "${current}/.config/$config_dir" "$HOME/.config/$config_dir"
-done
+# Config directories that should stay fully managed
+link_item "${current}/.config/nvim" "$HOME/.config/nvim"
+link_item "${current}/.config/starship.toml" "$HOME/.config/starship.toml"
+
+# Config directories that mix managed files with local state
+ensure_real_directory "$HOME/.config/atuin"
+link_item "${current}/.config/atuin/config.toml" "$HOME/.config/atuin/config.toml"
+
+ensure_real_directory "$HOME/.config/gh"
+link_item "${current}/.config/gh/config.yml" "$HOME/.config/gh/config.yml"
+
+ensure_real_directory "$HOME/.config/karabiner"
+link_item "${current}/.config/karabiner/assets" "$HOME/.config/karabiner/assets"
+link_item "${current}/.config/karabiner/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
+
+ensure_real_directory "$HOME/.config/mise"
+link_item "${current}/.config/mise/config.toml" "$HOME/.config/mise/config.toml"
+
+ensure_real_directory "$HOME/.config/uv"
+
+ensure_real_directory "$HOME/.config/yazi"
+link_item "${current}/.config/yazi/yazi.toml" "$HOME/.config/yazi/yazi.toml"
+
+ensure_real_directory "$HOME/.config/yt-dlp"
+
+ensure_real_directory "$HOME/.config/zed"
+link_item "${current}/.config/zed/keymap.json" "$HOME/.config/zed/keymap.json"
+link_item "${current}/.config/zed/settings.json" "$HOME/.config/zed/settings.json"
 
 # Git global ignore
 link_item "${current}/.gitignore_global" "$HOME/.gitignore_global"
@@ -70,9 +112,13 @@ git config --global core.excludesfile ~/.gitignore_global
 mkdir -p ~/Library/Application\ Support/com.mitchellh.ghostty
 link_item "${current}/ghostty" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
 
+# Shell config
+link_item "${current}/.profile" "$HOME/.profile"
+link_item "${current}/.zprofile" "$HOME/.zprofile"
+link_item "${current}/.zshenv" "$HOME/.zshenv"
+
 # Zsh config
 link_item "${current}/.zshrc" "$HOME/.zshrc"
-link_item "${current}/.zprofile" "$HOME/.zprofile"
 
 # Tmux config
 link_item "${current}/.tmux.conf" "$HOME/.tmux.conf"

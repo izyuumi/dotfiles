@@ -1,23 +1,37 @@
 setopt no_nomatch
 
 # ---------- env ----------
-export TERM="xterm-256color"
+export TERM="${TERM:-xterm-256color}"
 export EDITOR="vim"
 export VISUAL="vim"
+export BUN_INSTALL="$HOME/.bun"
+export NVM_DIR="$HOME/.nvm"
+export SDKMAN_DIR="$HOME/.sdkman"
 
-typeset -gU path fpath
+typeset -gU path PATH fpath
 
-path=(
-  "$HOME/.local/bin"
-  "$HOME/.opencode/bin"
-  "$HOME/.antigravity/antigravity/bin"
-  $path
-)
+path_prepend_if_dir() {
+  [ -d "$1" ] && path=("$1" $path)
+}
+
+path_append_if_dir() {
+  [ -d "$1" ] && path=($path "$1")
+}
+
+source_if_exists() {
+  [ -r "$1" ] && . "$1"
+}
 
 # Drop legacy runtime-manager paths that may be inherited from older shells.
 path=(${path:#$HOME/.nvm/versions/node/*/bin})
 path=(${path:#$HOME/.nvm/versions/node/*/lib/node_modules/@openai/codex/node_modules/*/vendor/*/path})
 path=(${path:#$HOME/.bun/bin})
+
+path_prepend_if_dir "$HOME/.local/bin"
+path_prepend_if_dir "$BUN_INSTALL/bin"
+path_prepend_if_dir "$HOME/.opencode/bin"
+path_prepend_if_dir "$HOME/.antigravity/antigravity/bin"
+path_append_if_dir "$HOME/.lmstudio/bin"
 
 if [[ -n ${HOMEBREW_PREFIX:-} ]]; then
   fpath=("$HOMEBREW_PREFIX/share/zsh/site-functions" $fpath)
@@ -130,7 +144,7 @@ alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && 
 alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
 
 alias reload="exec ${SHELL} -l"
-alias path='printf "%s\n" $path'
+alias path='print -l $path'
 
 # ---------- tools ----------
 if command -v atuin >/dev/null 2>&1; then
@@ -138,16 +152,28 @@ if command -v atuin >/dev/null 2>&1; then
 fi
 
 # Let mise manage runtime selection in interactive shells.
-eval "$(/opt/homebrew/bin/mise activate zsh)"
+if [ -x /opt/homebrew/bin/mise ]; then
+  eval "$(/opt/homebrew/bin/mise activate zsh)"
+fi
 
 if command -v ssh-add >/dev/null 2>&1; then
   /usr/bin/ssh-add --apple-load-keychain 2>/dev/null
 fi
 
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh --cmd cd)"
+fi
+
+source_if_exists "$NVM_DIR/nvm.sh"
+source_if_exists "$NVM_DIR/bash_completion"
+source_if_exists "$HOME/.local/bin/env"
+source_if_exists "$BUN_INSTALL/_bun"
+source_if_exists "$HOME/.sdkman/bin/sdkman-init.sh"
+
 # ---------- tmux ----------
 # t [name] -> attach/create session (outside tmux)
 t() {
-  local name="${1:-yumi}"
+  local name="${1:-$(basename "${PWD%/}")}"
 
   if [[ -n "$TMUX" ]]; then
     local current
@@ -226,7 +252,4 @@ if command -v brew >/dev/null 2>&1; then
   fi
 fi
 
-# ---------- zoxide ----------
-if command -v zoxide >/dev/null 2>&1; then
-  eval "$(zoxide init zsh --cmd cd)"
-fi
+source_if_exists "$HOME/.zshrc.local"

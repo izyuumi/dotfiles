@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 if command -v cargo > /dev/null 2>&1; then
   echo "Cargo is already installed"
 else
@@ -15,6 +17,11 @@ cargo_packages=(
 )
 
 for package in "${cargo_packages[@]}"; do
+  if cargo install --list | grep -q "^${package} "; then
+    echo "$package is already installed"
+    continue
+  fi
+
   echo "Installing $package..."
   cargo install "$package"
 done
