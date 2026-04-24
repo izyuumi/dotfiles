@@ -40,26 +40,20 @@ return require("packer").startup(function(use)
 		end,
 	})
 
-	use("nvim-treesitter/nvim-treesitter", {
+	use({
+		"nvim-treesitter/nvim-treesitter",
+		branch = "master",
 		run = ":TSUpdate",
 	})
 
 	use("mbbill/undotree")
 
-	use({
-		"VonHeikemen/lsp-zero.nvim",
-		branch = "v2.x",
-		requires = {
-			{ "neovim/nvim-lspconfig" }, -- Required
-			{ "williamboman/mason.nvim" }, -- Optional
-			{ "williamboman/mason-lspconfig.nvim" }, -- Optional
-
-			-- Autocompletion
-			{ "hrsh7th/nvim-cmp" }, -- Required
-			{ "hrsh7th/cmp-nvim-lsp" }, -- Required
-			{ "L3MON4D3/LuaSnip" }, -- Required
-		},
-	})
+	use("neovim/nvim-lspconfig")
+	use("williamboman/mason.nvim")
+	use("williamboman/mason-lspconfig.nvim")
+	use("hrsh7th/nvim-cmp")
+	use("hrsh7th/cmp-nvim-lsp")
+	use("L3MON4D3/LuaSnip")
 
 	use("voldikss/vim-floaterm")
 
@@ -140,21 +134,6 @@ return require("packer").startup(function(use)
 					null_ls.builtins.formatting.stylua,
 					null_ls.builtins.completion.spell,
 				},
-			})
-		end,
-	})
-
-	use({
-		"hrsh7th/cmp-nvim-lsp",
-		config = function()
-			require("cmp").setup({
-				sources = {
-					{ name = "nvim_lsp" },
-				},
-			})
-			local capabilities = require("cmp_nvim_lsp").default_capabilities()
-			require("lspconfig").clangd.setup({
-				capabilities = capabilities,
 			})
 		end,
 	})
