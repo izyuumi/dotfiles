@@ -156,8 +156,8 @@ if [ -x /opt/homebrew/bin/mise ]; then
   eval "$(/opt/homebrew/bin/mise activate zsh)"
 fi
 
-if command -v ssh-add >/dev/null 2>&1; then
-  /usr/bin/ssh-add --apple-load-keychain 2>/dev/null
+if command -v ssh-add >/dev/null 2>&1 && ! /usr/bin/ssh-add -l >/dev/null 2>&1; then
+  /usr/bin/ssh-add --apple-load-keychain >/dev/null 2>&1 &!
 fi
 
 if command -v zoxide >/dev/null 2>&1; then
@@ -233,7 +233,14 @@ if [[ -d "$HOME/.docker/completions" ]]; then
 fi
 
 autoload -Uz compinit
-compinit
+__zcompdump="${ZDOTDIR:-$HOME}/.zcompdump"
+__zcompdump_recent=("${__zcompdump}"(N.mh-24))
+if [[ -s "$__zcompdump" && ${#__zcompdump_recent[@]} -gt 0 ]]; then
+  compinit -C
+else
+  compinit
+fi
+unset __zcompdump __zcompdump_recent
 
 compdef _t_complete_sessions t
 compdef _t_complete_sessions tk
