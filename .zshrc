@@ -79,9 +79,9 @@ o() {
 
 nv() {
   if [[ $# -eq 0 ]]; then
-    command vim .
+    command nvim .
   else
-    command vim "$@"
+    command nvim "$@"
   fi
 }
 
