@@ -10,9 +10,6 @@ BRANCH="main"
 
 ts() { date +"%Y-%m-%d %H:%M:%S"; }
 log() { printf '[%s] %s\n' "$(ts)" "$*" >>"$LOG"; }
-notify() {
-  /usr/bin/osascript -e "display notification \"$1\" with title \"dotfiles-sync\"" 2>/dev/null || true
-}
 
 cd "$REPO" 2>/dev/null || { log "repo missing: $REPO"; exit 1; }
 
@@ -40,10 +37,8 @@ log "remote ahead: $LOCAL -> $REMOTE"
 if ! /usr/bin/git pull --rebase --autostash --quiet origin "$BRANCH" 2>>"$LOG"; then
   log "pull failed (conflict or rebase abort)"
   /usr/bin/git rebase --abort 2>/dev/null || true
-  notify "pull conflict — resolve manually"
   exit 1
 fi
 
 NEW=$(/usr/bin/git rev-parse "$BRANCH")
 log "updated: $LOCAL -> $NEW"
-notify "synced to $(/usr/bin/git log -1 --pretty=%s)"
