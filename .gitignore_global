@@ -1,2 +1,5 @@
 .DS_Store
 nvim_sessions
+.profile.local
+.zprofile.local
+.zshrc.local
