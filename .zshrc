@@ -171,9 +171,9 @@ source_if_exists "$BUN_INSTALL/_bun"
 source_if_exists "$HOME/.sdkman/bin/sdkman-init.sh"
 
 # ---------- tmux ----------
-# t [name] -> attach/create session (outside tmux)
+# t [name] -> attach/create session (defaults to yumi, outside tmux)
 t() {
-  local name="${1:-$(basename "${PWD%/}")}"
+  local name="${1:-yumi}"
 
   if [[ -n "$TMUX" ]]; then
     local current
