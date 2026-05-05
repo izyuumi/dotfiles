@@ -1,0 +1,136 @@
+# =============================================================================
+#  tmux.conf.native
+#  Native tmux options, keybindings, hooks, and helper integrations.
+# =============================================================================
+
+
+# -----------------------------------------------------------------------------
+# Core (prefixes, escape, focus, terminal)
+# -----------------------------------------------------------------------------
+set -g  prefix  C-b
+set -g  prefix2 C-a
+bind    C-a send-prefix -2                     # Ctrl-a twice -> literal Ctrl-a
+
+set -s  escape-time   0                        # snappy key handling
+set -g  focus-events  on
+
+# tmux-256color enables italics; layered overrides add truecolor + clipboard
+set -g  default-terminal "tmux-256color"
+set -ga terminal-overrides ",*:Tc"
+set -ag terminal-overrides ",*256col*:colors=256:Tc"
+# Ms = OSC 52 clipboard (works with mosh)
+# https://gist.github.com/yudai/95b20e3da66df1b066531997f982b57b
+set -ag terminal-overrides "vte*:XT:Ms=\\E]52;c;%p2%s\\7,xterm*:XT:Ms=\\E]52;c;%p2%s\\7"
+set -as terminal-features  ',xterm-255color:clipboard,ghostty:clipboard'
+
+
+# -----------------------------------------------------------------------------
+# Indexing & naming
+# -----------------------------------------------------------------------------
+set -g  base-index       0
+setw -g pane-base-index  0
+set -g  renumber-windows on
+set -g  automatic-rename on
+set -g  automatic-rename-format '#($HOME/.tmux/scripts/window-name.sh "#{pane_id}")'
+set -g  allow-rename     off
+
+
+# -----------------------------------------------------------------------------
+# Behavior (history, timing, activity, resize policy)
+# -----------------------------------------------------------------------------
+set -g  history-limit    50000
+set -g  display-time     2000
+set -g  repeat-time      600
+setw -g monitor-activity on
+set -g  visual-activity  off
+setw -g aggressive-resize on
+
+
+# -----------------------------------------------------------------------------
+# Input
+# -----------------------------------------------------------------------------
+
+# Mouse
+set -g mouse off
+
+# Copy mode (vim-like)
+setw -g mode-keys vi
+bind Enter                                copy-mode
+bind -T copy-mode-vi v                    send -X begin-selection
+bind -T copy-mode-vi C-v                  send -X rectangle-toggle
+bind -T copy-mode-vi Enter                send -X copy-selection-and-cancel
+bind -T copy-mode-vi Escape               send -X cancel
+bind -T copy-mode-vi H                    send -X start-of-line
+bind -T copy-mode-vi L                    send -X end-of-line
+bind -T copy-mode-vi y                    send -X copy-pipe-and-cancel "pbcopy"
+bind -T copy-mode-vi MouseDragEnd2Pane    send -X copy-selection-and-cancel
+
+# Clipboard / paste
+set -g set-clipboard on
+bind ] paste-buffer -p                    # bracketed paste
+bind P choose-buffer                      # choose from paste buffers
+bind b list-buffers                       # inspect paste buffers
+
+# Restore window navigation (prefix p was shadowed by paste-buffer)
+unbind p
+bind p previous-window
+bind n next-window
+
+
+# -----------------------------------------------------------------------------
+# Keybindings
+# -----------------------------------------------------------------------------
+
+# Config helpers
+bind r source-file ~/.tmux.conf \; display "reloaded"
+bind e new-window -n '.tmux.conf.local' "$HOME/.tmux/scripts/edit-local-config.sh"
+
+# Session / window creation
+bind C-c command-prompt -p "new session" "new-session -c '#{pane_current_path}' -s '%%'"
+bind c   new-window -c "#{pane_current_path}"
+
+# Splits (open in current pane's directory)
+bind | split-window -h -c "#{pane_current_path}"
+bind - split-window -v -c "#{pane_current_path}"
+unbind '"'
+unbind %
+
+# Pane navigation (vim keys + alt-arrows)
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+bind -n M-Left  select-pane -L
+bind -n M-Right select-pane -R
+bind -n M-Up    select-pane -U
+bind -n M-Down  select-pane -D
+
+# Pane resize / maximize
+bind -r C-h resize-pane -L 6
+bind -r C-j resize-pane -D 6
+bind -r C-k resize-pane -U 6
+bind -r C-l resize-pane -R 6
+bind + run-shell "$HOME/.tmux/scripts/maximize-pane.sh '#{session_name}' '#{pane_id}'"
+
+# Layout / sync / mouse
+bind = select-layout tiled
+bind B setw synchronize-panes \; display-message "Sync panes: #{?synchronize-panes,ON,OFF}"
+bind m if -F '#{mouse}' \
+  { set -g mouse off ; display-message "Mouse: OFF" } \
+  { set -g mouse on  ; display-message "Mouse: ON"  }
+# Restore tmux's stock wheel behavior on reload after local experiments.
+bind -n WheelUpPane if-shell -F '#{||:#{alternate_on},#{pane_in_mode},#{mouse_any_flag}}' \
+  { send-keys -M } \
+  { copy-mode -e }
+unbind -n WheelDownPane
+set-hook -g pane-focus-in 'run-shell "$HOME/.tmux/scripts/rename-window.sh #{pane_id} #{window_id}"'
+set-hook -g after-new-window 'run-shell "$HOME/.tmux/scripts/rename-window.sh #{pane_id} #{window_id}"'
+set-hook -g after-split-window 'run-shell "$HOME/.tmux/scripts/rename-window.sh #{pane_id} #{window_id}"'
+
+# Pickers / popups
+bind g   display-popup -E "tmux ls -F '#S' | fzf --reverse | xargs tmux switch-client -t"
+bind C-w choose-tree -Zw
+# Scratch shell (Alt-t toggles persistent scratch session)
+bind -n M-t if-shell -F '#{==:#{session_name},scratch}' \
+  'detach-client' \
+  'display-popup -d "#{pane_current_path}" -xC -yC -w80% -h80% -E "tmux new -A -s scratch"'
