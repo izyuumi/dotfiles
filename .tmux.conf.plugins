@@ -1,0 +1,40 @@
+# =============================================================================
+#  tmux.conf.plugins
+#  TPM plugin declarations and plugin-specific options.
+# =============================================================================
+
+
+# -----------------------------------------------------------------------------
+# Plugins
+# -----------------------------------------------------------------------------
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-resurrect'
+set -g @plugin 'tmux-plugins/tmux-continuum'
+set -g @plugin 'tmux-plugins/tmux-yank'
+set -g @plugin 'Ataraxy-Labs/opensessions'
+set -g @plugin 'alexwforsythe/tmux-which-key'
+set -g @plugin 'laktak/extrakto'
+set -g @plugin 'fcsonline/tmux-thumbs'
+set -g @plugin 'omerxx/tmux-sessionx'
+set -g @plugin 'tmux-plugins/tmux-open'
+
+
+# -----------------------------------------------------------------------------
+# Plugin Options
+# -----------------------------------------------------------------------------
+
+# tmux-thumbs (avoid prefix-Space conflict with which-key)
+set -g @thumbs-key Y
+
+# tmux-sessionx
+set -g @sessionx-bind        'O'
+set -g @sessionx-zoxide-mode 'on'
+
+# tmux-resurrect
+set -g @resurrect-capture-pane-contents 'on'
+set -g @resurrect-strategy-vim          'session'
+set -g @resurrect-strategy-nvim         'session'
+
+# tmux-continuum (auto-save every 15 min, auto-restore on start)
+set -g @continuum-save-interval '15'
+set -g @continuum-restore       'on'

@@ -122,6 +122,8 @@ link_item "${current}/.zshrc" "$HOME/.zshrc"
 
 # Tmux config
 link_item "${current}/.tmux.conf" "$HOME/.tmux.conf"
+link_item "${current}/.tmux.conf.plugins" "$HOME/.tmux.conf.plugins"
+link_item "${current}/.tmux.conf.native" "$HOME/.tmux.conf.native"
 link_item "${current}/.tmux.conf.local" "$HOME/.tmux.conf.local"
 mkdir -p "$HOME/.tmux/scripts"
 for tmux_script in edit-local-config.sh maximize-pane.sh window-name.sh rename-window.sh; do
