@@ -9,4 +9,5 @@ name=$("$script_dir/window-name.sh" "$pane_id")
 
 if [ -n "$name" ]; then
   tmux rename-window -t "$window_id" "$name"
+  tmux set-window-option -t "$window_id" automatic-rename on >/dev/null
 fi

@@ -17,19 +17,73 @@ local_name() {
   fi
 }
 
-remote_path_from_title() {
+local_host_short() {
+  host=$(hostname -s 2>/dev/null || hostname 2>/dev/null || true)
+  host=${host%%.*}
+  printf '%s' "$host"
+}
+
+is_local_title_host() {
+  title_host=$1
+  local_host=$(local_host_short)
+
+  [ -n "$local_host" ] && [ "$title_host" = "$local_host" ]
+}
+
+trim_title() {
+  printf '%s' "$1" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//'
+}
+
+mosh_title_payload() {
   title=$1
-  title=${title## }
-  title=${title%% }
+
+  case "$title" in
+    "[mosh] "*)
+      payload=${title#"[mosh] "}
+      payload=$(trim_title "$payload")
+      [ -n "$payload" ] || return 1
+
+      case "$payload" in
+        *" "*)
+          first=${payload%% *}
+          rest=${payload#* }
+          case "$first" in
+            *[[:alnum:]_./~:-]*)
+              ;;
+            *)
+              payload=$rest
+              ;;
+          esac
+          ;;
+      esac
+
+      printf '%s' "$payload"
+      return 0
+      ;;
+  esac
+
+  return 1
+}
+
+path_from_title_value() {
+  title=$1
 
   case "$title" in
     *:\ ~*|*:\ /*)
+      title_host=${title%%:*}
+      if is_local_title_host "$title_host"; then
+        return 1
+      fi
       title=${title#*: }
       ;;
   esac
 
   case "$title" in
     *:~*|*:/*)
+      title_host=${title%%:*}
+      if is_local_title_host "$title_host"; then
+        return 1
+      fi
       printf '%s' "${title#*:}"
       return 0
       ;;
@@ -40,6 +94,21 @@ remote_path_from_title() {
   esac
 
   return 1
+}
+
+remote_path_from_title() {
+  title=$(trim_title "$1")
+
+  if payload=$(mosh_title_payload "$title"); then
+    if path=$(path_from_title_value "$payload"); then
+      printf '%s' "$path"
+    else
+      printf '%s' "$payload"
+    fi
+    return 0
+  fi
+
+  path_from_title_value "$title"
 }
 
 remote_host_from_args() {
