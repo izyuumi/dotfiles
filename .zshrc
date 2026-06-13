@@ -110,7 +110,7 @@ shellExit() {
 
 # ---------- aliases ----------
 alias lg="lazygit"
-alias yolo="CLAUDE_CODE_NO_FLICKER=1 claude --dangerously-skip-permissions --model claude-fable-5"
+alias yolo="CLAUDE_CODE_NO_FLICKER=1 claude --dangerously-skip-permissions"
 alias colo="codex --yolo"
 
 alias ..="cd .."
