@@ -30,7 +30,6 @@ path=(${path:#$HOME/.bun/bin})
 path_prepend_if_dir "$HOME/.local/bin"
 path_prepend_if_dir "$BUN_INSTALL/bin"
 path_prepend_if_dir "$HOME/.opencode/bin"
-path_prepend_if_dir "$HOME/.antigravity/antigravity/bin"
 path_append_if_dir "$HOME/.lmstudio/bin"
 
 if [[ -n ${HOMEBREW_PREFIX:-} ]]; then
