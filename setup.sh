@@ -7,6 +7,18 @@ current="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 echo "🚀 Setting up dotfiles..."
 
 backup_dir=""
+
+ensure_macos() {
+  echo "🍎 Checking macOS environment..."
+
+  if [ "$(uname -s)" != "Darwin" ]; then
+    echo "  ! This setup script is intended for macOS"
+    exit 1
+  fi
+
+  echo "  ✓ Running on macOS"
+}
+
 backup_if_needed() {
   if [ -z "$backup_dir" ]; then
     backup_dir="$HOME/.dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
@@ -60,6 +72,31 @@ ensure_real_directory() {
   mkdir -p "$dir"
 }
 
+ensure_xcode_command_line_tools() {
+  local developer_dir
+
+  echo "🧰 Checking Xcode Command Line Tools..."
+
+  if ! command -v xcode-select >/dev/null 2>&1; then
+    echo "  ! xcode-select is not available on this machine"
+    echo "    Install Xcode Command Line Tools, then re-run ./setup.sh"
+    exit 1
+  fi
+
+  if developer_dir="$(xcode-select -p 2>/dev/null)" && [ -d "$developer_dir" ] && xcrun --find clang >/dev/null 2>&1; then
+    echo "  ✓ Found developer tools at $developer_dir"
+    return 0
+  fi
+
+  echo "  ! Xcode Command Line Tools are missing or not ready"
+  echo "    Opening the installer. Re-run ./setup.sh after it finishes."
+  xcode-select --install 2>/dev/null || true
+  exit 1
+}
+
+ensure_macos
+ensure_xcode_command_line_tools
+
 # Install package managers and packages
 echo "📦 Installing Rust toolchain and cargo packages..."
 chmod +x "${current}/cargo.sh"
@@ -68,6 +105,11 @@ chmod +x "${current}/cargo.sh"
 echo "🍺 Installing Homebrew packages..."
 chmod +x "${current}/brew.sh"
 "${current}/brew.sh"
+
+echo "🖥️ Applying macOS defaults..."
+chmod +x "${current}/macos/defaults.sh"
+chmod +x "${current}/macos/finder.sh"
+"${current}/macos/defaults.sh"
 
 # Create symlinks
 echo "🔗 Creating symlinks..."
