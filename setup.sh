@@ -178,3 +178,4 @@ done
 
 echo "✅ Dotfiles setup complete!"
 echo "💡 Run 'source ~/.zshrc' to reload your shell configuration"
+echo "💡 Run './post-setup.sh' to finish CLI tool setup"
