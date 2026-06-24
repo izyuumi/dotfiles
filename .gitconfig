@@ -1,0 +1,32 @@
+# Public-safe Git defaults. Keep private values such as user.email and tokens in
+# ~/.gitconfig.local, which this repo intentionally ignores.
+[include]
+	path = ~/.gitconfig.local
+
+[user]
+	name = Yumi Izumi
+	signingkey = 69B062708BAB05A2
+
+[commit]
+	gpgsign = true
+
+[tag]
+	gpgSign = true
+
+[core]
+	excludesfile = ~/.config/git/ignore
+
+[gpg]
+	program = /opt/homebrew/bin/gpg
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[github]
+	user = izyuumi
+
+[credential]
+	helper = osxkeychain

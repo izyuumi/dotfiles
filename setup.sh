@@ -86,6 +86,9 @@ link_item "${current}/.config/atuin/config.toml" "$HOME/.config/atuin/config.tom
 ensure_real_directory "$HOME/.config/gh"
 link_item "${current}/.config/gh/config.yml" "$HOME/.config/gh/config.yml"
 
+ensure_real_directory "$HOME/.config/git"
+link_item "${current}/.config/git/ignore" "$HOME/.config/git/ignore"
+
 ensure_real_directory "$HOME/.config/karabiner"
 link_item "${current}/.config/karabiner/assets" "$HOME/.config/karabiner/assets"
 link_item "${current}/.config/karabiner/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
@@ -106,7 +109,7 @@ link_item "${current}/.config/zed/settings.json" "$HOME/.config/zed/settings.jso
 
 # Git global ignore
 link_item "${current}/.gitignore_global" "$HOME/.gitignore_global"
-git config --global core.excludesfile ~/.gitignore_global
+link_item "${current}/.gitconfig" "$HOME/.gitconfig"
 
 # Ghostty config
 mkdir -p ~/Library/Application\ Support/com.mitchellh.ghostty

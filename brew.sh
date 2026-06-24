@@ -45,6 +45,7 @@ regular_packages=(
   "docker"
   "dos2unix"
   "dotnet"
+  "exiftool"
   "fd"
   "ffmpeg-full"
   "filosottile/musl-cross/musl-cross"

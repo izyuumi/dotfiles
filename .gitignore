@@ -3,6 +3,7 @@
 .sync.stdout.log
 .sync.stderr.log
 .zcompdump*
+.gitconfig.local
 *.pyc
 __pycache__/
 .config/atuin/atuin-receipt.json
