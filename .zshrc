@@ -137,10 +137,21 @@ alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias localip="ipconfig getifaddr en0"
 alias ips="ifconfig -a | grep -o 'inet6\\? \\(addr:\\)\\?\\s\\?\\(\\(\\([0-9]\\+\\.\\)\\{3\\}[0-9]\\+\\)\\|[a-fA-F0-9:]\\+\\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
 
-alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
-alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
-alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
-alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
+dotfiles_finder() {
+  local script="${DOTFILES_DIR:-$HOME/dotfiles}/macos/finder.sh"
+
+  if [[ ! -r "$script" ]]; then
+    echo "Missing $script"
+    return 1
+  fi
+
+  bash "$script" "$@"
+}
+
+alias show="dotfiles_finder show-hidden-files"
+alias hide="dotfiles_finder hide-hidden-files"
+alias hidedesktop="dotfiles_finder hide-desktop"
+alias showdesktop="dotfiles_finder show-desktop"
 
 alias reload="exec ${SHELL} -l"
 alias path='print -l $path'

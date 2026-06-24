@@ -5,6 +5,7 @@ set -euo pipefail
 # Curated, public-safe defaults only. Do not dump raw plist files here; they can
 # include recent paths, text replacements, device state, and other local data.
 
+echo "Applying global macOS defaults..."
 defaults write NSGlobalDomain AppleInterfaceStyle -string "Dark"
 defaults write NSGlobalDomain AppleShowScrollBars -string "WhenScrolling"
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
@@ -16,15 +17,19 @@ defaults write NSGlobalDomain com.apple.trackpad.forceClick -bool false
 defaults write NSGlobalDomain com.apple.trackpad.scaling -float 3
 defaults write NSGlobalDomain com.apple.mouse.scaling -float 3
 
+echo "Applying Finder defaults..."
 defaults write com.apple.finder AppleShowAllFiles -bool true
+defaults write com.apple.finder CreateDesktop -bool false
 defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
 defaults write com.apple.finder _FXSortFoldersFirst -bool true
 
+echo "Applying Dock defaults..."
 defaults write com.apple.dock autohide -bool true
 defaults write com.apple.dock autohide-delay -float 0
 defaults write com.apple.dock autohide-time-modifier -float 0
 defaults write com.apple.dock launchanim -bool false
 defaults write com.apple.dock minimize-to-application -bool true
+defaults write com.apple.dock persistent-apps -array
 defaults write com.apple.dock show-recents -bool false
 defaults write com.apple.dock springboard-columns -int 9
 defaults write com.apple.dock springboard-rows -int 6
@@ -36,5 +41,6 @@ defaults write com.apple.dock wvous-br-modifier -int 0
 defaults write com.apple.dock wvous-tr-corner -int 1
 defaults write com.apple.dock wvous-tr-modifier -int 0
 
+echo "Restarting Finder and Dock..."
 killall Finder >/dev/null 2>&1 || true
 killall Dock >/dev/null 2>&1 || true
