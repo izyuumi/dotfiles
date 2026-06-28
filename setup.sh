@@ -94,6 +94,64 @@ ensure_xcode_command_line_tools() {
   exit 1
 }
 
+setup_karabiner() {
+  local config_dir="$HOME/.config/karabiner"
+  local config="$HOME/.config/karabiner/karabiner.json"
+  local complex_modifications="$HOME/.config/karabiner/assets/complex_modifications/*.json"
+  local attempt
+
+  echo "⌨️ Setting up Karabiner-Elements..."
+
+  if [ -L "$config_dir" ] && [ "$(readlink "$config_dir")" = "${current}/.config/karabiner" ]; then
+    echo "  ✓ Karabiner config directory is linked"
+  else
+    echo "  ! Karabiner config directory is not linked to dotfiles"
+  fi
+
+  if [ ! -d "/Applications/Karabiner-Elements.app" ]; then
+    echo "  ! Karabiner-Elements.app is missing; run ./brew.sh and re-run ./setup.sh"
+    return 0
+  fi
+
+  if command -v jq >/dev/null 2>&1; then
+    jq empty "$config"
+    echo "  ✓ Karabiner config JSON is valid"
+  else
+    echo "  ! jq missing; skipping Karabiner config JSON validation"
+  fi
+
+  if command -v karabiner_cli >/dev/null 2>&1; then
+    karabiner_cli --lint-complex-modifications "$complex_modifications" >/dev/null
+    echo "  ✓ Karabiner complex modifications are valid"
+  else
+    echo "  ! karabiner_cli missing; skipping Karabiner CLI setup"
+    return 0
+  fi
+
+  if open -g -a "Karabiner-Elements" >/dev/null 2>&1; then
+    echo "  ✓ Opened Karabiner-Elements in the background"
+  else
+    echo "  ! Could not open Karabiner-Elements"
+  fi
+
+  if launchctl kickstart -k "gui/$(id -u)/org.pqrs.service.agent.karabiner_console_user_server" >/dev/null 2>&1; then
+    echo "  ✓ Restarted Karabiner user server"
+  else
+    echo "  ! Could not restart Karabiner user server"
+  fi
+
+  for attempt in 1 2 3 4 5; do
+    if karabiner_cli --select-profile "Default profile" >/dev/null 2>&1; then
+      echo "  ✓ Selected Karabiner Default profile"
+      return 0
+    fi
+
+    sleep 1
+  done
+
+  echo "  ! Open Karabiner-Elements and approve Background Items, Accessibility, and Driver Extensions, then re-run ./setup.sh"
+}
+
 ensure_macos
 ensure_xcode_command_line_tools
 
@@ -118,6 +176,7 @@ echo "🔗 Creating symlinks..."
 mkdir -p ~/.config
 
 # Config directories that should stay fully managed
+link_item "${current}/.config/karabiner" "$HOME/.config/karabiner"
 link_item "${current}/.config/nvim" "$HOME/.config/nvim"
 link_item "${current}/.config/starship.toml" "$HOME/.config/starship.toml"
 
@@ -131,9 +190,7 @@ link_item "${current}/.config/gh/config.yml" "$HOME/.config/gh/config.yml"
 ensure_real_directory "$HOME/.config/git"
 link_item "${current}/.config/git/ignore" "$HOME/.config/git/ignore"
 
-ensure_real_directory "$HOME/.config/karabiner"
-link_item "${current}/.config/karabiner/assets" "$HOME/.config/karabiner/assets"
-link_item "${current}/.config/karabiner/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
+setup_karabiner
 
 ensure_real_directory "$HOME/.config/mise"
 link_item "${current}/.config/mise/config.toml" "$HOME/.config/mise/config.toml"

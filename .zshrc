@@ -260,6 +260,11 @@ if command -v brew >/dev/null 2>&1; then
   typeset -g __brew_prefix
   __brew_prefix="$(brew --prefix)"
 
+  if [[ -o interactive && -o zle && -t 0 && -t 1 ]] && command -v fzf >/dev/null 2>&1; then
+    # Keep Atuin on Ctrl-R while enabling fzf completion and file/directory widgets.
+    FZF_CTRL_R_COMMAND= source <(fzf --zsh)
+  fi
+
   if [[ -f "$__brew_prefix/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
     source "$__brew_prefix/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
   fi
