@@ -172,6 +172,9 @@ chmod +x "${current}/macos/finder.sh"
 # Create symlinks
 echo "🔗 Creating symlinks..."
 
+# Cross-client Agent Skills
+link_item "${current}/.agents" "$HOME/.agents"
+
 # Create .config directory if it doesn't exist
 mkdir -p ~/.config
 
