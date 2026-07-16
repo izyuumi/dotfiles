@@ -1,0 +1,301 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+resolve_script_root() {
+  local directory source target
+
+  source=$0
+  while [ -L "$source" ]; do
+    directory=$(CDPATH= cd -- "$(dirname -- "$source")" && pwd)
+    target=$(readlink "$source")
+    case "$target" in
+      /*) source=$target ;;
+      *) source=$directory/$target ;;
+    esac
+  done
+  CDPATH= cd -- "$(dirname -- "$source")/.." && pwd
+}
+
+ROOT="${DOTFILES_DIR:-$(resolve_script_root)}"
+CANONICAL="$ROOT/.agents/skills"
+AGENTS_SKILLS="$HOME/.agents/skills"
+CLAUDE_SKILLS="$HOME/.claude/skills"
+
+usage() {
+  cat <<'USAGE'
+Usage: dotfiles-skills <command> [arguments]
+
+Commands:
+  status                     Show whether canonical skill links are healthy
+  sync                       Import live-only skills and repair discovery links
+  add OWNER/REPO SKILL       Preview and install a GitHub skill, then sync
+  check                      Check tracked GitHub skills for updates
+  update                     Update tracked GitHub skills, then sync
+  list                       List skills in the canonical directory
+USAGE
+}
+
+skill_name() {
+  local name
+
+  name=$(sed -n 's/^name:[[:space:]]*//p' "$1/SKILL.md" | sed -n '1p')
+  case "$name" in
+    \"*\") name=${name#\"}; name=${name%\"} ;;
+    \'*\') name=${name#\'}; name=${name%\'} ;;
+  esac
+  printf '%s\n' "$name"
+}
+
+validate_skills() {
+  local dir name path
+
+  mkdir -p "$CANONICAL"
+  for path in "$CANONICAL"/*; do
+    [ -e "$path" ] || continue
+    [ -d "$path" ] || continue
+    dir=$(basename "$path")
+    if [ ! -f "$path/SKILL.md" ]; then
+      echo "error: $path is missing SKILL.md" >&2
+      return 1
+    fi
+    name=$(skill_name "$path")
+    if [ -z "$name" ]; then
+      echo "error: $path/SKILL.md is missing name frontmatter" >&2
+      return 1
+    fi
+    if [ "$name" != "$dir" ]; then
+      echo "error: skill name '$name' does not match directory '$dir'" >&2
+      return 1
+    fi
+    if ! grep -q '^description:[[:space:]]*' "$path/SKILL.md"; then
+      echo "error: $path/SKILL.md is missing description frontmatter" >&2
+      return 1
+    fi
+  done
+}
+
+preflight_live_skills() {
+  local canonical live name
+
+  [ -d "$AGENTS_SKILLS" ] || return 0
+  [ ! -L "$AGENTS_SKILLS" ] || return 0
+
+  for live in "$AGENTS_SKILLS"/* "$AGENTS_SKILLS"/.[!.]* "$AGENTS_SKILLS"/..?*; do
+    [ -e "$live" ] || [ -L "$live" ] || continue
+    if [ -L "$live" ]; then
+      echo "error: refusing to import symlinked live skill $live" >&2
+      return 1
+    fi
+    if [ ! -d "$live" ] || [ ! -f "$live/SKILL.md" ]; then
+      echo "error: refusing to remove unrecognized live entry $live" >&2
+      return 1
+    fi
+    name=$(basename "$live")
+    canonical="$CANONICAL/$name"
+    if [ -e "$canonical" ] && ! diff -qr "$canonical" "$live" >/dev/null 2>&1; then
+      echo "error: skill conflict for '$name'" >&2
+      echo "  canonical: $canonical" >&2
+      echo "  live:      $live" >&2
+      return 1
+    fi
+  done
+}
+
+normalize_agents_parent() {
+  local canonical_parent live_parent lock
+
+  if [ ! -L "$HOME/.agents" ]; then
+    mkdir -p "$HOME/.agents"
+    return 0
+  fi
+
+  live_parent=$(CDPATH= cd -- "$HOME/.agents" 2>/dev/null && pwd -P) || {
+    echo "error: $HOME/.agents is a broken symlink" >&2
+    return 1
+  }
+  canonical_parent=$(CDPATH= cd -- "$ROOT/.agents" && pwd -P)
+  if [ "$live_parent" != "$canonical_parent" ]; then
+    echo "error: refusing to replace $HOME/.agents -> $(readlink "$HOME/.agents")" >&2
+    return 1
+  fi
+
+  lock="$ROOT/.agents/.skill-lock.json"
+  rm "$HOME/.agents"
+  mkdir -p "$HOME/.agents"
+  if [ -e "$lock" ] || [ -L "$lock" ]; then
+    mv "$lock" "$HOME/.agents/.skill-lock.json"
+    echo "migrated $HOME/.agents/.skill-lock.json"
+  fi
+  echo "migrated $HOME/.agents parent symlink"
+}
+
+import_live_skills() {
+  local live name
+
+  [ -d "$AGENTS_SKILLS" ] || return 0
+  [ ! -L "$AGENTS_SKILLS" ] || return 0
+
+  for live in "$AGENTS_SKILLS"/*; do
+    [ -d "$live" ] || continue
+    [ -f "$live/SKILL.md" ] || continue
+    name=$(basename "$live")
+    if [ ! -e "$CANONICAL/$name" ]; then
+      cp -R "$live" "$CANONICAL/$name"
+      echo "imported $name"
+    fi
+  done
+}
+
+link_agents_skills() {
+  if [ -L "$AGENTS_SKILLS" ]; then
+    if [ "$(readlink "$AGENTS_SKILLS")" = "$CANONICAL" ]; then
+      return 0
+    fi
+    rm "$AGENTS_SKILLS"
+  elif [ -e "$AGENTS_SKILLS" ]; then
+    rm -rf "$AGENTS_SKILLS"
+  fi
+
+  ln -s "$CANONICAL" "$AGENTS_SKILLS"
+  echo "linked $AGENTS_SKILLS -> $CANONICAL"
+}
+
+link_claude_skills() {
+  local destination name source target
+
+  mkdir -p "$CLAUDE_SKILLS"
+  for destination in "$CLAUDE_SKILLS"/*; do
+    [ -L "$destination" ] || continue
+    target=$(readlink "$destination")
+    case "$target" in
+      "$CANONICAL"/*)
+        if [ ! -f "$target/SKILL.md" ]; then
+          rm "$destination"
+          echo "removed stale Claude link $destination"
+        fi
+        ;;
+    esac
+  done
+
+  for source in "$CANONICAL"/*; do
+    [ -d "$source" ] || continue
+    [ -f "$source/SKILL.md" ] || continue
+    name=$(basename "$source")
+    destination="$CLAUDE_SKILLS/$name"
+
+    if [ -L "$destination" ]; then
+      if [ "$(readlink "$destination")" = "$source" ]; then
+        continue
+      fi
+      rm "$destination"
+    elif [ -e "$destination" ]; then
+      echo "warning: preserving Claude-owned skill $destination" >&2
+      continue
+    fi
+
+    ln -s "$source" "$destination"
+    echo "linked $destination -> $source"
+  done
+}
+
+sync_skills() {
+  validate_skills
+  normalize_agents_parent
+  preflight_live_skills
+  import_live_skills
+  validate_skills
+  link_agents_skills
+  link_claude_skills
+}
+
+status_skills() {
+  local count=0 destination source target
+
+  validate_skills
+  if [ ! -L "$AGENTS_SKILLS" ] || [ "$(readlink "$AGENTS_SKILLS" 2>/dev/null || true)" != "$CANONICAL" ]; then
+    echo "not synchronized: $AGENTS_SKILLS" >&2
+    return 1
+  fi
+
+  for destination in "$CLAUDE_SKILLS"/*; do
+    [ -L "$destination" ] || continue
+    target=$(readlink "$destination")
+    case "$target" in
+      "$CANONICAL"/*)
+        if [ ! -f "$target/SKILL.md" ]; then
+          echo "not synchronized: stale Claude link $destination" >&2
+          return 1
+        fi
+        ;;
+    esac
+  done
+
+  for source in "$CANONICAL"/*; do
+    [ -f "$source/SKILL.md" ] || continue
+    count=$((count + 1))
+    destination="$CLAUDE_SKILLS/$(basename "$source")"
+    if [ -L "$destination" ] && [ "$(readlink "$destination")" = "$source" ]; then
+      continue
+    fi
+    if [ -e "$destination" ] && [ ! -L "$destination" ]; then
+      echo "warning: Claude-owned skill shadows canonical skill $destination" >&2
+      continue
+    fi
+    echo "not synchronized: $destination" >&2
+    return 1
+  done
+  echo "canonical: $CANONICAL"
+  echo "agents:    $AGENTS_SKILLS -> $CANONICAL"
+  echo "skills:    $count"
+}
+
+require_gh() {
+  if ! command -v gh >/dev/null 2>&1; then
+    echo "error: gh is required for this command" >&2
+    return 1
+  fi
+}
+
+command=${1:-}
+case "$command" in
+  status)
+    [ "$#" -eq 1 ] || { usage >&2; exit 2; }
+    status_skills
+    ;;
+  sync)
+    [ "$#" -eq 1 ] || { usage >&2; exit 2; }
+    sync_skills
+    ;;
+  add)
+    [ "$#" -eq 3 ] || { usage >&2; exit 2; }
+    require_gh
+    mkdir -p "$CANONICAL"
+    gh skill preview "$2" "$3"
+    gh skill install "$2" "$3" --dir "$CANONICAL"
+    sync_skills
+    ;;
+  check)
+    [ "$#" -eq 1 ] || { usage >&2; exit 2; }
+    require_gh
+    gh skill update --all --dry-run --dir "$CANONICAL"
+    ;;
+  update)
+    [ "$#" -eq 1 ] || { usage >&2; exit 2; }
+    require_gh
+    gh skill update --all --dir "$CANONICAL"
+    sync_skills
+    ;;
+  list)
+    [ "$#" -eq 1 ] || { usage >&2; exit 2; }
+    require_gh
+    gh skill list --dir "$CANONICAL"
+    ;;
+  -h|--help)
+    usage
+    ;;
+  *)
+    usage >&2
+    exit 2
+    ;;
+esac

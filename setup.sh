@@ -173,7 +173,8 @@ chmod +x "${current}/macos/finder.sh"
 echo "🔗 Creating symlinks..."
 
 # Cross-client Agent Skills
-link_item "${current}/.agents" "$HOME/.agents"
+chmod +x "${current}/bin/dotfiles-skills"
+DOTFILES_DIR="$current" "${current}/bin/dotfiles-skills" sync
 
 # Create .config directory if it doesn't exist
 mkdir -p ~/.config
