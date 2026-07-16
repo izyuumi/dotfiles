@@ -1,0 +1,66 @@
+#!/bin/bash
+# dotfiles-codex-config — merge curated Codex settings into ~/.codex/config.toml
+#
+# The live config mixes managed keys with machine state Codex writes itself
+# (trusted projects, plugin hashes, notices), so it cannot be a symlink.
+# This deep-merges .codex/config.toml from the repo into the live file:
+# curated keys win, everything else is left untouched, formatting and
+# comments in the live file are preserved (tomlkit). Idempotent.
+
+set -euo pipefail
+
+current="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+curated="${current}/.codex/config.toml"
+live="${HOME}/.codex/config.toml"
+
+if [ ! -f "$curated" ]; then
+  echo "  ! Missing curated config at $curated"
+  exit 1
+fi
+
+if ! command -v uv >/dev/null 2>&1; then
+  echo "  ! uv missing; run ./cargo.sh or ./brew.sh first"
+  exit 1
+fi
+
+mkdir -p "$(dirname "$live")"
+
+uv run --quiet --with tomlkit - "$curated" "$live" <<'PY'
+import shutil
+import sys
+from pathlib import Path
+
+import tomlkit
+
+curated_path, live_path = Path(sys.argv[1]), Path(sys.argv[2])
+
+curated = tomlkit.parse(curated_path.read_text())
+
+if not live_path.exists():
+    live_path.write_text(curated_path.read_text())
+    print(f"  + Created {live_path} from curated config")
+    sys.exit(0)
+
+original = live_path.read_text()
+live = tomlkit.parse(original)
+
+
+def merge(dst, src):
+    for key, value in src.items():
+        if key in dst and isinstance(dst[key], dict) and isinstance(value, dict):
+            merge(dst[key], value)
+        else:
+            dst[key] = value
+
+
+merge(live, curated)
+merged = tomlkit.dumps(live)
+
+if merged == original:
+    print("  = Codex config already up to date")
+else:
+    backup = live_path.with_suffix(".toml.bak")
+    shutil.copy2(live_path, backup)
+    live_path.write_text(merged)
+    print(f"  + Merged curated keys into {live_path} (backup: {backup})")
+PY

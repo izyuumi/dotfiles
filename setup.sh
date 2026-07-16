@@ -209,6 +209,15 @@ ensure_real_directory "$HOME/.config/zed"
 link_item "${current}/.config/zed/keymap.json" "$HOME/.config/zed/keymap.json"
 link_item "${current}/.config/zed/settings.json" "$HOME/.config/zed/settings.json"
 
+# Claude Code (~/.claude mixes managed files with local state)
+ensure_real_directory "$HOME/.claude"
+link_item "${current}/.claude/settings.json" "$HOME/.claude/settings.json"
+link_item "${current}/.claude/statusline-command.sh" "$HOME/.claude/statusline-command.sh"
+
+# Codex (config.toml mixes managed keys with machine state; merged, not linked)
+chmod +x "${current}/bin/dotfiles-codex-config"
+"${current}/bin/dotfiles-codex-config"
+
 # Git global ignore
 link_item "${current}/.gitignore_global" "$HOME/.gitignore_global"
 link_item "${current}/.gitconfig" "$HOME/.gitconfig"

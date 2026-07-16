@@ -1,0 +1,24 @@
+# Curated Codex settings, merged into ~/.codex/config.toml by
+# bin/dotfiles-codex-config. Only portable keys belong here — Codex writes
+# machine state (trusted projects, plugin hashes, notices, MCP paths) into
+# the live file, so it cannot be symlinked wholesale.
+
+hide_agent_reasoning = true
+model = "gpt-5.6-sol"
+model_reasoning_effort = "high"
+personality = "pragmatic"
+service_tier = "fast"
+
+[features]
+multi_agent = true
+remote_connections = true
+js_repl = false
+
+[agents]
+max_threads = 16
+
+[shell_environment_policy]
+inherit = "core"
+
+[shell_environment_policy.set]
+ENABLE_TOOL_SEARCH = "TRUE"
