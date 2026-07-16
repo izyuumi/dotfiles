@@ -80,6 +80,7 @@ regular_packages=(
   "ripgrep"
   "rsync"
   "sevenzip"
+  "shellcheck"
   "shfmt"
   "starship"
   "steipete/tap/gogcli"
