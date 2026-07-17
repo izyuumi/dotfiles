@@ -162,8 +162,8 @@ if command -v atuin >/dev/null 2>&1; then
 fi
 
 # Let mise manage runtime selection in interactive shells.
-if [ -x /opt/homebrew/bin/mise ]; then
-  eval "$(/opt/homebrew/bin/mise activate zsh)"
+if command -v mise >/dev/null 2>&1; then
+  eval "$(mise activate zsh)"
 fi
 
 if command -v ssh-add >/dev/null 2>&1 && ! /usr/bin/ssh-add -l >/dev/null 2>&1; then

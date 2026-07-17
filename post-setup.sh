@@ -4,6 +4,9 @@ set -euo pipefail
 
 current="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# shellcheck source=lib/link.sh
+source "${current}/lib/link.sh"
+
 with_trust_store=false
 
 for arg in "$@"; do
@@ -59,23 +62,15 @@ ensure_macos() {
 load_shell_paths() {
   log "Loading post-bootstrap PATH"
 
-  if [ -x /opt/homebrew/bin/brew ]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-    ok "Loaded Homebrew from /opt/homebrew"
-  elif [ -x /usr/local/bin/brew ]; then
-    eval "$(/usr/local/bin/brew shellenv)"
-    ok "Loaded Homebrew from /usr/local"
+  # shellcheck source=shell/paths.sh
+  . "$current/shell/paths.sh"
+
+  if [ -n "${HOMEBREW_PREFIX:-}" ]; then
+    eval "$("$HOMEBREW_PREFIX/bin/brew" shellenv)"
+    ok "Loaded Homebrew from $HOMEBREW_PREFIX"
   else
     warn "Homebrew is not available; run ./brew.sh first"
   fi
-
-  if [ -r "$HOME/.cargo/env" ]; then
-    # shellcheck disable=SC1091
-    . "$HOME/.cargo/env"
-    ok "Loaded Cargo environment"
-  fi
-
-  export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 }
 
 require_after_brew() {
@@ -116,32 +111,10 @@ check_cli_dependencies() {
   if have clangd; then
     ok "clangd found"
   elif have brew && llvm_prefix="$(brew --prefix llvm 2>/dev/null)" && [ -x "$llvm_prefix/bin/clangd" ]; then
-    ensure_link "$llvm_prefix/bin/clangd" "$HOME/.local/bin/clangd"
+    link_item "$llvm_prefix/bin/clangd" "$HOME/.local/bin/clangd"
   else
     warn "clangd missing; run ./brew.sh after pulling the latest package list"
   fi
-}
-
-ensure_link() {
-  local src="$1"
-  local dest="$2"
-  local backup
-
-  mkdir -p "$(dirname "$dest")"
-
-  if [ -L "$dest" ] && [ "$(readlink "$dest")" = "$src" ]; then
-    ok "Already linked $dest"
-    return 0
-  fi
-
-  if [ -e "$dest" ] || [ -L "$dest" ]; then
-    backup="${dest}.backup.$(date +%Y%m%d-%H%M%S)"
-    mv "$dest" "$backup"
-    warn "Moved existing $dest to $backup"
-  fi
-
-  ln -s "$src" "$dest"
-  ok "Linked $dest"
 }
 
 setup_repo_helpers() {
@@ -153,14 +126,14 @@ setup_repo_helpers() {
 
   for helper in "$current"/bin/dotfiles-*; do
     [ -e "$helper" ] || continue
-    ensure_link "$helper" "$HOME/.local/bin/$(basename "$helper")"
+    link_item "$helper" "$HOME/.local/bin/$(basename "$helper")"
   done
 }
 
 setup_completions() {
   log "Setting up shell completions"
 
-  ensure_link "$current/.zsh/completions/_mise" "$HOME/.zsh/completions/_mise"
+  link_item "$current/.zsh/completions/_mise" "$HOME/.zsh/completions/_mise"
 
   if have docker; then
     mkdir -p "$HOME/.docker/completions"
@@ -260,6 +233,23 @@ install_mise_tools() {
   ok "mise tools installed"
 }
 
+setup_codex_config() {
+  local shims="${XDG_DATA_HOME:-$HOME/.local/share}/mise/shims"
+
+  log "Merging curated Codex config"
+
+  # uv comes from mise; its shims are not on this script's PATH by default
+  if [ -d "$shims" ]; then
+    case ":$PATH:" in
+      *":$shims:"*) ;;
+      *) export PATH="$shims:$PATH" ;;
+    esac
+  fi
+
+  chmod +x "$current/bin/dotfiles-codex-config"
+  "$current/bin/dotfiles-codex-config"
+}
+
 setup_neovim() {
   local packer_dir
 
@@ -338,6 +328,7 @@ setup_git_tools
 setup_tmux_plugins
 setup_gpg
 install_mise_tools
+setup_codex_config
 setup_neovim
 setup_atuin
 setup_mkcert

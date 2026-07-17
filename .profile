@@ -1,12 +1,8 @@
-if [ -f "$HOME/.cargo/env" ]; then
-  . "$HOME/.cargo/env"
-fi
-
-if [ -d "/opt/homebrew/bin" ]; then
-  case ":$PATH:" in
-    *":/opt/homebrew/bin:"*) ;;
-    *) PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH" ;;
-  esac
+if [ -r "$HOME/.config/shell/paths.sh" ]; then
+  . "$HOME/.config/shell/paths.sh"
+elif [ -r "$HOME/dotfiles/shell/paths.sh" ]; then
+  # Fallback until ./setup.sh has linked ~/.config/shell/paths.sh
+  . "$HOME/dotfiles/shell/paths.sh"
 fi
 
 if [ -d "$HOME/.lmstudio/bin" ]; then

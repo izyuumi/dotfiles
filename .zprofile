@@ -2,13 +2,10 @@ if [ -f "$HOME/.profile" ]; then
   . "$HOME/.profile"
 fi
 
-if [ -x /opt/homebrew/bin/brew ]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
-
-# Keep mise shims on PATH for login and non-interactive shells.
-if [ -x /opt/homebrew/bin/mise ]; then
-  eval "$(/opt/homebrew/bin/mise activate zsh --shims)"
+# Full Homebrew environment (MANPATH, HOMEBREW_* vars) once per login;
+# base PATH entries already come from ~/.config/shell/paths.sh.
+if [ -n "${HOMEBREW_PREFIX:-}" ] && [ -x "$HOMEBREW_PREFIX/bin/brew" ]; then
+  eval "$("$HOMEBREW_PREFIX/bin/brew" shellenv)"
 fi
 
 if [ -f "$HOME/.zprofile.local" ]; then
