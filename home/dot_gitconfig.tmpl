@@ -1,0 +1,37 @@
+# Managed by chezmoi (dotfiles/home/dot_gitconfig.tmpl). Machine-local
+# secrets and overrides live in ~/.gitconfig.local, which is never committed.
+[include]
+	path = ~/.gitconfig.local
+
+[user]
+	name = Yumi Izumi
+	email = {{ .email }}
+	signingkey = {{ .signingkey }}
+
+[commit]
+	gpgsign = true
+
+[tag]
+	gpgSign = true
+
+[core]
+	excludesfile = ~/.config/git/ignore
+
+[gpg]
+{{- if eq .chezmoi.arch "arm64" }}
+	program = /opt/homebrew/bin/gpg
+{{- else }}
+	program = /usr/local/bin/gpg
+{{- end }}
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[github]
+	user = izyuumi
+
+[credential]
+	helper = osxkeychain

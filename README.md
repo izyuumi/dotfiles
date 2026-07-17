@@ -1,5 +1,42 @@
 # dotfiles
 
+## New Mac setup
+
+```sh
+git clone https://github.com/izyuumi/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+./install.sh
+```
+
+`install.sh` runs `./setup.sh` (Xcode CLT check, Rust and Homebrew packages,
+macOS defaults, symlinks) and then `./post-setup.sh` (mise runtimes, Codex
+config merge, tmux plugins, GPG, completions). Both steps are idempotent —
+re-run `./install.sh` if a step stops, e.g. while waiting on the Xcode CLT
+installer or Karabiner permission approvals. Pass `--with-trust-store` to
+also install the mkcert local CA.
+
+### chezmoi (incremental migration in progress)
+
+`.gitconfig` and Homebrew packages are managed by [chezmoi](https://www.chezmoi.io);
+source state lives in [`home/`](home/) (see `.chezmoiroot`). Per-machine
+identity (role, git email, signing key) is prompted once at init:
+
+```sh
+chezmoi init --source ~/dotfiles
+chezmoi apply
+```
+
+Day-to-day: edit files under `home/`, then `chezmoi apply`. Machine-local
+secrets stay in `~/.gitconfig.local` (never committed).
+
+Manual follow-ups after install:
+
+- Create `~/.gitconfig.local` with your private Git email
+- Import your GPG private key
+- `gh auth login --hostname github.com --git-protocol https`
+- `atuin login`
+- Optionally `bin/dotfiles-sync-install` on Macs that should pull hourly
+
 ## Agent skills
 
 The Git-tracked `.agents/skills` directory is the source of truth for personal

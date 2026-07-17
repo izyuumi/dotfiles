@@ -83,7 +83,6 @@ regular_packages=(
   "shellcheck"
   "shfmt"
   "starship"
-  "steipete/tap/gogcli"
   "stylua"
   "swiftformat"
   "swiftlint"

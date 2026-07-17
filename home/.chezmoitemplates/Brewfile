@@ -1,0 +1,130 @@
+# Brewfile — rendered per machine; role: {{ .role }}
+# Snapshot of the primary (work) Mac. Carve role sections out as fleet
+# machines migrate: {{ "{{ if eq .role \"work\" }}" }} … {{ "{{ end }}" }}
+
+tap "filosottile/musl-cross"
+tap "izyumidev/xcode-discord-rpc", "https://github.com/izyuumi/homebrew-xcode-discord-rpc.git"
+tap "izyuumi/xcode-discord-rpc", "https://github.com/izyuumi/homebrew-xcode-discord-rpc.git"
+tap "steipete/tap"
+# Run your GitHub Actions locally
+brew "act"
+# Browser automation CLI for AI agents
+brew "agent-browser"
+# Code searching, linting, rewriting
+brew "ast-grep"
+# Improved shell history for zsh, bash, fish and nushell
+brew "atuin", restart_service: :changed
+# Clone of cat(1) with syntax highlighting and Git integration
+brew "bat"
+# Binary installation for rust projects
+brew "cargo-binstall"
+# Manage your dotfiles across multiple diverse machines, securely
+brew "chezmoi"
+# Cloudflare Tunnel client (formerly Argo Tunnel)
+brew "cloudflared"
+# Cross-platform make
+brew "cmake"
+# Get a file from an HTTP, HTTPS or FTP server
+brew "curl"
+# Pack, ship and run any application as a lightweight container
+brew "docker"
+# Convert text between DOS, UNIX, and Mac formats
+brew "dos2unix"
+# .NET Core
+brew "dotnet"
+# Perl lib for reading and writing EXIF metadata
+brew "exiftool"
+# Simple, fast and user-friendly alternative to find
+brew "fd"
+# Play, record, convert, and stream many audio and video codecs
+brew "ffmpeg-full"
+# Command-line fuzzy finder written in Go
+brew "fzf"
+# GitHub command-line tool
+brew "gh"
+# Syntax-highlighting pager for git and diff output
+brew "git-delta"
+# Git extension for versioning large files
+brew "git-lfs"
+# GNU Privacy Guard (OpenPGP)
+brew "gnupg"
+# Improved top (interactive process viewer)
+brew "htop"
+# Tools and libraries to manipulate images in many formats
+brew "imagemagick-full", link: true
+# Tool to measure maximum TCP and UDP bandwidth
+brew "iperf"
+# Update of iperf: measures TCP, UDP, and SCTP bandwidth
+brew "iperf3"
+# Lightweight and flexible command-line JSON processor
+brew "jq"
+# Simple terminal UI for git commands
+brew "lazygit"
+# Powerful, lightweight programming language
+brew "lua"
+# Tool for working with usage-spec CLIs
+brew "usage"
+# Polyglot runtime manager (asdf rust clone)
+brew "mise"
+# Simple tool to make locally trusted development certificates
+brew "mkcert"
+# Remote terminal application
+brew "mosh"
+# Ambitious Vim-fork focused on extensibility and agility
+brew "neovim"
+# CLI for NextDNS's DNS-over-HTTPS (DoH)
+brew "nextdns"
+# Selects the right Node package manager based on lockfiles
+brew "ni"
+# Adds an OCR text layer to scanned PDF files
+brew "ocrmypdf"
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
+# AI coding agent, built for the terminal
+brew "opencode"
+# Parallel gzip
+brew "pigz"
+# Pinentry for GPG on Mac
+brew "pinentry-mac"
+# PDF rendering library (based on the xpdf-3.0 code base)
+brew "poppler"
+# Cross-platform library for audio I/O
+brew "portaudio"
+# Monitor data's progress through a pipe
+brew "pv"
+# SVG rendering tool and library
+brew "resvg"
+# Utility that provides fast incremental file transfer
+brew "rsync"
+# 7-Zip is a file archiver with a high compression ratio
+brew "sevenzip"
+# Static analysis and lint tool, for (ba)sh scripts
+brew "shellcheck"
+# SQLite extension providing 256-bit AES encryption
+brew "sqlcipher"
+# Cross-shell prompt for astronauts
+brew "starship"
+# Terminal multiplexer
+brew "tmux"
+# Shell extension to navigate your filesystem faster
+brew "zoxide"
+# Keyboard customiser
+cask "karabiner-elements"
+# Markdown previewer with bundled Quick Look extension
+cask "markdown-preview"
+go "cmd/go"
+go "cmd/gofmt"
+cargo "cargo-bloat"
+cargo "cargo-generate"
+cargo "cargo-unused-features"
+cargo "cargo-watch"
+cargo "cargo-workspaces"
+cargo "create-tauri-app"
+cargo "cross"
+cargo "eza"
+cargo "jj-cli"
+cargo "tauri-cli"
+cargo "trunk"
+uv "mistral-vibe"
+uv "yt-dlp"
+npm "@openai/codex"

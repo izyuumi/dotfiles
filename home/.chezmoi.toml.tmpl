@@ -1,0 +1,10 @@
+{{- $role := promptStringOnce . "role" "role" -}}
+{{- $email := promptStringOnce . "email" "email" -}}
+{{- $signingkey := promptStringOnce . "signingkey" "signingkey" -}}
+
+sourceDir = {{ .chezmoi.workingTree | quote }}
+
+[data]
+    role = {{ $role | quote }}
+    email = {{ $email | quote }}
+    signingkey = {{ $signingkey | quote }}
