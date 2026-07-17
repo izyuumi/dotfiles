@@ -105,7 +105,7 @@ cask_packages=(
   "azookey"
   "chatgpt"
   "dockdoor"
-  "flux-markdown"
+  "markdown-preview"
   "font-hack-nerd-font"
   "font-symbols-only-nerd-font"
   "fuse-t"
