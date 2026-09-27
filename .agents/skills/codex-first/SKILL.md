@@ -7,7 +7,7 @@ description: "Route implementation work to Codex CLI; Claude specs, reviews, ver
 
 Claude Code sessions only. Codex/other harnesses: skip; never self-delegate.
 
-Rationale: Claude (Fable/Opus) tokens metered + expensive; Codex flat-rate. GPT-5.6 (Sol/Terra/Luna) is usually the better and faster model at writing/implementing code; Claude wins at ergonomics — judgment, design, spec-writing, review, orchestration. So Codex types, Claude thinks and verifies.
+Rationale: Claude (Fable/Opus) tokens metered + expensive; Codex flat-rate. GPT-6 (Astra/Sol/Luna) is usually the better and faster model at writing/implementing code; Claude wins at ergonomics — judgment, design, spec-writing, review, orchestration. So Codex types, Claude thinks and verifies.
 
 ## Route
 
@@ -31,13 +31,13 @@ Mixed task: Claude designs first, freezes spec, delegates build-out.
 Heuristic: prompt reads as a work order → delegate; writing it forces decisions → design, Claude.
 Portfolio/multi-repo work: `$maintainer-orchestrator` instead.
 
-## Model pick (GPT-5.6 series)
+## Model pick (GPT-6 series)
 
-- `gpt-5.6-terra` — default for delegation: implementation, refactors, bug fixes, tests (≈GPT-5.5 quality, 2x cheaper).
-- `gpt-5.6-sol` — flagship; escalate only: hard bugs, gnarly refactors, or after Terra fails a round. (Current `~/.codex/config.toml` default.)
-- `gpt-5.6-luna` — fastest/cheapest: bulk exploration, mechanical migrations, scripts, dep bumps.
+- `gpt-6-sol` — default for delegation: implementation, refactors, bug fixes, tests. Workhorse; `~/.codex/config.toml` default.
+- `gpt-6-astra` — frontier; escalate only: hard bugs, gnarly refactors, or after Sol fails a round. Costs more usage, fast mode included.
+- `gpt-6-luna` — fastest/cheapest: bulk exploration, mechanical migrations, scripts, dep bumps.
 
-Pass `-m <slug>` on `codex exec`; omit to use the config default (Sol).
+No Terra in GPT-6. Omit `-m` for Sol; pass `-m <slug>` on `codex exec` for Astra or Luna.
 
 ## Invoke
 
