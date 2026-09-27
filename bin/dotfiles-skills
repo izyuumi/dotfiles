@@ -257,6 +257,25 @@ require_gh() {
   fi
 }
 
+require_gh_skill() {
+  require_gh
+  if ! gh skill --help >/dev/null 2>&1; then
+    echo "error: gh with 'skill' support is required (GitHub CLI 2.90.0+)" >&2
+    return 1
+  fi
+}
+
+check_updates() {
+  local output
+
+  output=$(gh skill update --all --dry-run --dir "$CANONICAL" 2>&1)
+  printf '%s\n' "$output"
+  if printf '%s\n' "$output" | grep -q 'has no GitHub metadata'; then
+    echo "error: update check incomplete; migrate or reinstall the listed skills with source metadata" >&2
+    return 1
+  fi
+}
+
 command=${1:-}
 case "$command" in
   status)
@@ -269,7 +288,7 @@ case "$command" in
     ;;
   add)
     [ "$#" -eq 3 ] || { usage >&2; exit 2; }
-    require_gh
+    require_gh_skill
     mkdir -p "$CANONICAL"
     gh skill preview "$2" "$3"
     gh skill install "$2" "$3" --dir "$CANONICAL"
@@ -277,18 +296,19 @@ case "$command" in
     ;;
   check)
     [ "$#" -eq 1 ] || { usage >&2; exit 2; }
-    require_gh
-    gh skill update --all --dry-run --dir "$CANONICAL"
+    require_gh_skill
+    check_updates
     ;;
   update)
     [ "$#" -eq 1 ] || { usage >&2; exit 2; }
-    require_gh
+    require_gh_skill
+    check_updates >/dev/null
     gh skill update --all --dir "$CANONICAL"
     sync_skills
     ;;
   list)
     [ "$#" -eq 1 ] || { usage >&2; exit 2; }
-    require_gh
+    require_gh_skill
     gh skill list --dir "$CANONICAL"
     ;;
   -h|--help)
