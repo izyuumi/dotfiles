@@ -7,7 +7,7 @@ description: "Route implementation work to Codex CLI; Claude specs, reviews, ver
 
 Claude Code sessions only. Codex/other harnesses: skip; never self-delegate.
 
-Rationale: Claude (Fable/Opus) tokens metered + expensive; Codex flat-rate. GPT-5.5+ is usually the better and faster model at writing/implementing code; Claude wins at ergonomics — judgment, design, spec-writing, review, orchestration. So Codex types, Claude thinks and verifies.
+Rationale: Claude (Fable/Opus) tokens metered + expensive; Codex flat-rate. GPT-5.6 (Sol/Terra/Luna) is usually the better and faster model at writing/implementing code; Claude wins at ergonomics — judgment, design, spec-writing, review, orchestration. So Codex types, Claude thinks and verifies.
 
 ## Route
 
@@ -31,6 +31,14 @@ Mixed task: Claude designs first, freezes spec, delegates build-out.
 Heuristic: prompt reads as a work order → delegate; writing it forces decisions → design, Claude.
 Portfolio/multi-repo work: `$maintainer-orchestrator` instead.
 
+## Model pick (GPT-5.6 series)
+
+- `gpt-5.6-terra` — default for delegation: implementation, refactors, bug fixes, tests (≈GPT-5.5 quality, 2x cheaper).
+- `gpt-5.6-sol` — flagship; escalate only: hard bugs, gnarly refactors, or after Terra fails a round. (Current `~/.codex/config.toml` default.)
+- `gpt-5.6-luna` — fastest/cheapest: bulk exploration, mechanical migrations, scripts, dep bumps.
+
+Pass `-m <slug>` on `codex exec`; omit to use the config default (Sol).
+
 ## Invoke
 
 Prompt via temp file, never inline quoting:
@@ -40,11 +48,14 @@ P=$(mktemp); cat >"$P" <<'EOF'
 <goal, repo + key paths, constraints ("don't touch X"), non-goals, proof expected, output shape>
 EOF
 command codex exec --yolo -C <repo> \
+  --enable fast_mode \
+  -c 'service_tier="fast"' \
   -c model_reasoning_effort="high" \
   -o /tmp/codex-last.md - <"$P" 2>/dev/null
 ```
 
 - `--yolo` is the house default; Codex may run commands/tests freely. Keep prompts scoped to the target repo.
+- Fast mode is mandatory for every delegated Codex command, including fresh runs, resumes, and any additional invocation added later. Always pass both `--enable fast_mode` and `-c 'service_tier="fast"'`; never rely on inherited config. Fast mode trades higher credit consumption for lower latency and requires ChatGPT sign-in plus a supported model.
 - `command codex` bypasses the interactive zsh wrapper; if not on PATH: `fnm exec --using default -- codex`
 - stderr suppressed (thinking noise bloats context); drop `2>/dev/null` only to debug a failing run
 - read `-o` file for the result; don't parse the JSONL stream
@@ -57,12 +68,22 @@ Follow-up fixes — cheaper than fresh runs, keeps context. `resume` has no `-C`
 ```bash
 (cd <repo> && command codex exec resume --last \
   --dangerously-bypass-approvals-and-sandbox \
+  --enable fast_mode \
+  -c 'service_tier="fast"' \
   -o /tmp/codex-last.md - <"$P2" 2>/dev/null)
 ```
 
 ## Prompt contract
 
 Codex starts with zero session context. Every prompt: goal, exact repo/paths, constraints, non-goals, proof expected (exact test command), output shape ("report files changed + test output"). Spec quality decides success.
+
+For substantial parallelizable work, also require: use the maximum available sub-agent concurrency; partition work by independently owned deliverables; keep freed capacity working on the next ready workstream; avoid search-only agents; preserve the frozen spec; report ownership and verification evidence for every stream.
+
+## Sub-agent saturation
+
+Keep every useful sub-agent slot occupied until no independent work remains. Give each agent a substantial, self-contained responsibility, such as bounded research that produces a decision, implementation with focused tests, test development with failure analysis, or implementation-level review with concrete fixes. Never create agents merely to search or summarize; their investigation must lead to an artifact, verified result, or actionable recommendation.
+
+As soon as an agent finishes, assign its slot the next unblocked workstream. Partition file and component ownership to prevent overlapping edits, and let the lead Codex run integrate the results. Planning inside a frozen spec and implementation-level peer review may be delegated, but Claude retains architecture, API, naming, and UX decisions plus the final review and verification.
 
 ## Verify (Claude, always)
 
