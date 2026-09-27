@@ -1,0 +1,15 @@
+{
+  "version": 3,
+  "skills": {
+    "test-audit": {
+      "source": "openclaw/openclaw",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/openclaw/openclaw.git",
+      "skillPath": ".agents/skills/test-audit/SKILL.md",
+      "skillFolderHash": "8015421942bcd215db0e73a13ec944d50ce01ec5",
+      "installedAt": "2026-09-24T17:36:11Z",
+      "updatedAt": "2026-09-24T17:36:11Z",
+      "pinnedRef": "5032aed36bd370e9905eec28c22c384feadef830"
+    }
+  }
+}
