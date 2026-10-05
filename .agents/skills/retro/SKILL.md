@@ -1,10 +1,9 @@
 ---
 description: Conduct a retrospective on a coding session.
+disable-model-invocation: true
 metadata:
-    disable-model-invocation: "true"
     github-path: skills/engineering/retro
-    github-pinned: d81f3a183412e71a5b1e84ca21bc1a35eea03a60
-    github-ref: d81f3a183412e71a5b1e84ca21bc1a35eea03a60
+    github-ref: refs/tags/v1.3.1
     github-repo: https://github.com/mattpocock/skills
     github-tree-sha: 335c1862a43da9d629abafdb79ca0c0de118be08
 name: retro
