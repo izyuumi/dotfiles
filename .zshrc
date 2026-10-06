@@ -68,6 +68,15 @@ nd() {
   mkdir -p -- "$1" && cd -P -- "$1"
 }
 
+nkdir() {
+  if [[ $# -ne 1 || -z "$1" ]]; then
+    print -u2 'Usage: nkdir <directory>'
+    return 1
+  fi
+
+  mkdir -p -- "$1" && builtin cd -- "$1"
+}
+
 fs() {
   if du -b /dev/null >/dev/null 2>&1; then
     local arg="-sbh"
