@@ -2,6 +2,7 @@
   "env": {
     "ENABLE_TOOL_SEARCH": "TRUE"
   },
+  "disableDeepLinkRegistration": "disable",
   "model": "claude-fable-5-1[1m]",
   "hooks": {
     "PostToolUse": [
