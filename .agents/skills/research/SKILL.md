@@ -7,7 +7,7 @@ metadata:
     github-tree-sha: 0a6796c5667e95ed2301ba7381c123b4acb2ae1a
 name: research
 ---
-Spin up a **background agent** to do the research, so you keep working while it reads.
+Spin up a **background agent** to do the research, so you keep working while it reads. Start it with a fresh context window.
 
 Its job:
 

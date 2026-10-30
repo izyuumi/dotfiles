@@ -59,5 +59,10 @@
   "fastMode": true,
   "showThinkingSummaries": true,
   "skipDangerousModePermissionPrompt": true,
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "permissions": {
+    "deny": [
+      "Agent(fork)"
+    ]
+  }
 }
