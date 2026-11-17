@@ -3,10 +3,6 @@
 [include]
 	path = ~/.gitconfig.local
 
-[user]
-	name = Yumi Izumi
-	signingkey = 69B062708BAB05A2
-
 [commit]
 	gpgsign = true
 
@@ -24,9 +20,6 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-
-[github]
-	user = izyuumi
 
 [credential]
 	helper = osxkeychain

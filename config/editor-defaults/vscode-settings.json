@@ -1,0 +1,9 @@
+{
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "python.languageServer": "Pylance",
+  "update.mode": "start",
+  "workbench.activityBar.location": "top",
+  "workbench.layoutControl.enabled": false
+}

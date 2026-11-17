@@ -1,5 +1,7 @@
 .DS_Store
 nvim_sessions
+CLAUDE.md
+**/.claude/settings.local.json
 .profile.local
 .zprofile.local
 .zshrc.local

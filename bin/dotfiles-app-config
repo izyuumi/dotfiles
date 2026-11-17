@@ -1,0 +1,57 @@
+#!/bin/bash
+# Merge public-safe app preferences without replacing private application state.
+
+set -euo pipefail
+
+current="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+if ! command -v jq >/dev/null 2>&1; then
+  echo "  ! jq missing; run ./brew.sh first" >&2
+  exit 1
+fi
+
+merge_json() {
+  local label="$1"
+  local app="$2"
+  local curated="$3"
+  local live="$4"
+  local temp
+
+  if [ ! -d "$app" ]; then
+    echo "  - Skipped $label (app is not installed)"
+    return 0
+  fi
+
+  mkdir -p "$(dirname "$live")"
+  if [ ! -f "$live" ]; then
+    echo "  - Skipped $label (settings have not been initialized)"
+    return 0
+  fi
+
+  temp="$(mktemp "$(dirname "$live")/.dotfiles-app-config.XXXXXX")"
+  if ! jq -s '.[0] * .[1]' "$live" "$curated" > "$temp"; then
+    rm -f "$temp"
+    echo "  ! Could not merge $label settings" >&2
+    return 1
+  fi
+
+  if cmp -s "$live" "$temp"; then
+    rm -f "$temp"
+    echo "  = $label settings already up to date"
+  else
+    mv -f "$temp" "$live"
+    echo "  + Merged public-safe $label settings"
+  fi
+}
+
+merge_json \
+  "Aqua Voice" \
+  "/Applications/Aqua Voice.app" \
+  "$current/config/app-defaults/aqua-voice.json" \
+  "$HOME/Library/Application Support/Aqua Voice/settings.json"
+
+merge_json \
+  "Screen Studio" \
+  "/Applications/Screen Studio.app" \
+  "$current/config/app-defaults/screen-studio.json" \
+  "$HOME/Library/Application Support/Screen Studio/user-preferences/settings-persistance.json"

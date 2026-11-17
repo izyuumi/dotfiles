@@ -1,0 +1,14 @@
+{{- $role := promptStringOnce . "role" "role" -}}
+{{- $name := promptStringOnce . "name" "name" -}}
+{{- $email := promptStringOnce . "email" "email" -}}
+{{- $signingkey := promptStringOnce . "signingkey" "signingkey" -}}
+{{- $githubUser := promptStringOnce . "github_user" "github_user" -}}
+
+sourceDir = {{ .chezmoi.workingTree | quote }}
+
+[data]
+    role = {{ $role | quote }}
+    name = {{ $name | quote }}
+    email = {{ $email | quote }}
+    signingkey = {{ $signingkey | quote }}
+    github_user = {{ $githubUser | quote }}

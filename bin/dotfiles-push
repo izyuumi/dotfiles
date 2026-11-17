@@ -8,7 +8,8 @@ REPO="${DOTFILES_DIR:-$HOME/dotfiles}"
 cd "$REPO"
 
 if [ -z "$(git status --porcelain)" ]; then
-  echo "nothing to commit"
+  "$REPO/bin/dotfiles-public-check"
+  git push origin main
   exit 0
 fi
 
@@ -17,6 +18,8 @@ if [ -z "$MSG" ]; then
   echo "usage: dotfiles-push \"message\"" >&2
   exit 1
 fi
+
+"$REPO/bin/dotfiles-public-check"
 
 git add -A
 git commit -m "$MSG"

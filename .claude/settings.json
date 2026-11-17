@@ -3,7 +3,7 @@
     "ENABLE_TOOL_SEARCH": "TRUE"
   },
   "disableDeepLinkRegistration": "disable",
-  "model": "claude-fable-5-1[1m]",
+  "disableClaudeAiConnectors": true,
   "hooks": {
     "PostToolUse": [
       {
@@ -37,6 +37,17 @@
           }
         ]
       }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/sh -c 'rex __internal session-start --agent claude 2>/dev/null || true'",
+            "timeout": 5
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
@@ -45,7 +56,8 @@
     "padding": 0
   },
   "enabledPlugins": {
-    "caveman@caveman": true
+    "caveman@caveman": true,
+    "typesafe@typesafe-ai": true
   },
   "extraKnownMarketplaces": {
     "caveman": {
@@ -53,12 +65,24 @@
         "source": "github",
         "repo": "JuliusBrussee/caveman"
       }
+    },
+    "typesafe-ai": {
+      "source": {
+        "source": "github",
+        "repo": "typesafe-ai/skills"
+      }
     }
   },
   "effortLevel": "high",
-  "fastMode": true,
+  "modelSettings": {
+    "claude-haiku-5-5": {
+      "autoCompactWindow": 100000
+    }
+  },
+  "tui": "fullscreen",
   "showThinkingSummaries": true,
   "skipDangerousModePermissionPrompt": true,
+  "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "permissions": {
     "deny": [

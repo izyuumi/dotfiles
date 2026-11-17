@@ -1,17 +1,11 @@
 typeset -U path PATH
 
-path=(
-  "$HOME/.local/bin"
-  "$HOME/.cargo/bin"
-  "/opt/homebrew/bin"
-  "/opt/homebrew/sbin"
-  $path
-)
-
-export PATH
-
-[ -r "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
-[ -r "$HOME/.atuin/bin/env" ] && . "$HOME/.atuin/bin/env"
+if [ -r "$HOME/.config/shell/paths.sh" ]; then
+  . "$HOME/.config/shell/paths.sh"
+elif [ -r "$HOME/dotfiles/shell/paths.sh" ]; then
+  # Fallback until ./setup.sh has linked ~/.config/shell/paths.sh
+  . "$HOME/dotfiles/shell/paths.sh"
+fi
 
 # zoxide's hook check misfires in shells that replay a snapshot (agent tools).
 export _ZO_DOCTOR=0

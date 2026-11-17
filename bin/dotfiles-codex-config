@@ -19,7 +19,7 @@ if [ ! -f "$curated" ]; then
 fi
 
 if ! command -v uv >/dev/null 2>&1; then
-  echo "  ! uv missing; run ./cargo.sh or ./brew.sh first"
+  echo "  ! uv missing; run 'mise install' (./post-setup.sh) first"
   exit 1
 fi
 

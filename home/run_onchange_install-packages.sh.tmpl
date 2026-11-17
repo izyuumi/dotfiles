@@ -1,0 +1,18 @@
+#!/bin/bash
+# Installs Homebrew packages from the rendered Brewfile. chezmoi re-runs
+# this script only when the rendered Brewfile content changes.
+# Brewfile hash: {{ include ".chezmoitemplates/Brewfile" | sha256sum }}
+
+set -euo pipefail
+
+if ! command -v brew >/dev/null 2>&1; then
+  echo "  ! brew missing; install Homebrew first (see setup.sh)" >&2
+  exit 1
+fi
+
+# Match brew.sh semantics: install missing packages, never upgrade existing.
+export HOMEBREW_BUNDLE_NO_UPGRADE=1
+
+brew bundle --file=/dev/stdin <<'BREWFILE'
+{{ template "Brewfile" . }}
+BREWFILE

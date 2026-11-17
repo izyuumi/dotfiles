@@ -6,7 +6,8 @@ current="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo "🚀 Setting up dotfiles..."
 
-backup_dir=""
+# shellcheck source=lib/link.sh
+source "${current}/lib/link.sh"
 
 ensure_macos() {
   echo "🍎 Checking macOS environment..."
@@ -17,59 +18,6 @@ ensure_macos() {
   fi
 
   echo "  ✓ Running on macOS"
-}
-
-backup_if_needed() {
-  if [ -z "$backup_dir" ]; then
-    backup_dir="$HOME/.dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
-    mkdir -p "$backup_dir"
-  fi
-}
-
-link_item() {
-  local src="$1"
-  local dest="$2"
-  local dest_dir
-
-  if [ ! -e "$src" ]; then
-    echo "  ! Skipped missing $(basename "$src")"
-    return 0
-  fi
-
-  if [ -L "$dest" ]; then
-    if [ "$(readlink "$dest")" = "$src" ]; then
-      echo "  ✓ Already linked $(basename "$dest")"
-      return 0
-    fi
-    backup_if_needed
-    mv "$dest" "$backup_dir/"
-  elif [ -e "$dest" ]; then
-    backup_if_needed
-    mv "$dest" "$backup_dir/"
-  fi
-
-  dest_dir="$(dirname "$dest")"
-  mkdir -p "$dest_dir"
-  ln -s "$src" "$dest"
-  echo "  ✓ Linked $(basename "$dest")"
-}
-
-ensure_real_directory() {
-  local dir="$1"
-  local temp_dir
-
-  if [ -L "$dir" ] && [ -d "$dir" ]; then
-    temp_dir="$(mktemp -d)"
-    cp -R "$dir/." "$temp_dir/" 2>/dev/null || true
-    rm "$dir"
-    mkdir -p "$dir"
-    cp -R "$temp_dir/." "$dir/" 2>/dev/null || true
-    rm -rf "$temp_dir"
-    echo "  ✓ Migrated $(basename "$dir") to a real directory"
-    return 0
-  fi
-
-  mkdir -p "$dir"
 }
 
 ensure_xcode_command_line_tools() {
@@ -98,7 +46,6 @@ setup_karabiner() {
   local config_dir="$HOME/.config/karabiner"
   local config="$HOME/.config/karabiner/karabiner.json"
   local complex_modifications="$HOME/.config/karabiner/assets/complex_modifications/*.json"
-  local attempt
 
   echo "⌨️ Setting up Karabiner-Elements..."
 
@@ -140,7 +87,7 @@ setup_karabiner() {
     echo "  ! Could not restart Karabiner user server"
   fi
 
-  for attempt in 1 2 3 4 5; do
+  for _ in 1 2 3 4 5; do
     if karabiner_cli --select-profile "Default profile" >/dev/null 2>&1; then
       echo "  ✓ Selected Karabiner Default profile"
       return 0
@@ -168,6 +115,10 @@ echo "🖥️ Applying macOS defaults..."
 chmod +x "${current}/macos/defaults.sh"
 chmod +x "${current}/macos/finder.sh"
 "${current}/macos/defaults.sh"
+if [ -f "${current}/macos/apps/defaults.sh" ]; then
+  chmod +x "${current}/macos/apps/defaults.sh"
+  "${current}/macos/apps/defaults.sh"
+fi
 
 # Create symlinks
 echo "🔗 Creating symlinks..."
@@ -190,6 +141,9 @@ link_item "${current}/.config/atuin/config.toml" "$HOME/.config/atuin/config.tom
 
 ensure_real_directory "$HOME/.config/gh"
 link_item "${current}/.config/gh/config.yml" "$HOME/.config/gh/config.yml"
+
+ensure_real_directory "$HOME/.config/fish"
+link_item "${current}/.config/fish/config.fish" "$HOME/.config/fish/config.fish"
 
 ensure_real_directory "$HOME/.config/git"
 link_item "${current}/.config/git/ignore" "$HOME/.config/git/ignore"
@@ -215,22 +169,28 @@ ensure_real_directory "$HOME/.claude"
 link_item "${current}/.claude/settings.json" "$HOME/.claude/settings.json"
 link_item "${current}/.claude/statusline-command.sh" "$HOME/.claude/statusline-command.sh"
 
-# Codex (config.toml mixes managed keys with machine state; merged, not linked)
-chmod +x "${current}/bin/dotfiles-codex-config"
-"${current}/bin/dotfiles-codex-config"
-
-# Git global ignore
+# Git global ignore (.gitconfig is chezmoi-managed; see home/dot_gitconfig.tmpl)
 link_item "${current}/.gitignore_global" "$HOME/.gitignore_global"
-link_item "${current}/.gitconfig" "$HOME/.gitconfig"
+
+# Mixed-state tool directories: manage only public-safe declarative files.
+ensure_real_directory "$HOME/.docker"
+link_item "${current}/.docker/daemon.json" "$HOME/.docker/daemon.json"
+
+ensure_real_directory "$HOME/.nuget"
+ensure_real_directory "$HOME/.nuget/NuGet"
+link_item "${current}/.nuget/NuGet/NuGet.Config" "$HOME/.nuget/NuGet/NuGet.Config"
 
 # Ghostty config
 mkdir -p ~/Library/Application\ Support/com.mitchellh.ghostty
 link_item "${current}/ghostty" "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
 
 # Shell config
+link_item "${current}/shell/paths.sh" "$HOME/.config/shell/paths.sh"
+link_item "${current}/.bashrc" "$HOME/.bashrc"
 link_item "${current}/.profile" "$HOME/.profile"
 link_item "${current}/.zprofile" "$HOME/.zprofile"
 link_item "${current}/.zshenv" "$HOME/.zshenv"
+link_item "${current}/.eslintrc" "$HOME/.eslintrc"
 
 # Zsh config
 link_item "${current}/.zshrc" "$HOME/.zshrc"
@@ -248,4 +208,4 @@ done
 
 echo "✅ Dotfiles setup complete!"
 echo "💡 Run 'source ~/.zshrc' to reload your shell configuration"
-echo "💡 Run './post-setup.sh' to finish CLI tool setup"
+echo "💡 Run './post-setup.sh' to finish CLI tool setup (or use './install.sh' to run both)"

@@ -13,3 +13,21 @@ __pycache__/
 .config/nvim/plugin/packer_compiled.lua
 .config/uv/
 .config/yazi/yazi.toml-*
+
+# Public-repo safety: credentials, account state, histories, and caches.
+/.claude.json*
+/.openclaw/
+/.config/configstore/
+/.config/github-copilot/
+/.config/opencode/node_modules/
+/.config/opencode/package*.json
+/.config/opencode/service.json
+/.config/raycast/
+/.config/tailscale-api/
+/.config/everything-tui/history
+/.config/opensessions/session-order.json
+/.config/wireshark/recent*
+
+# Never import raw macOS preference or application-support stores.
+/Library/Application Support/
+/Library/Preferences/

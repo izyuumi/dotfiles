@@ -1,0 +1,66 @@
+[
+  {
+    "key": "ctrl+alt+cmd+down",
+    "command": "editor.emmet.action.balanceIn"
+  },
+  {
+    "key": "ctrl+alt+cmd+up",
+    "command": "editor.emmet.action.balanceOut"
+  },
+  {
+    "key": "cmd+r cmd+r",
+    "command": "editor.action.rename",
+    "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "f2",
+    "command": "-editor.action.rename",
+    "when": "editorHasRenameProvider && editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "cmd+k cmd+m",
+    "command": "HookyQR.minify"
+  },
+  {
+    "key": "cmd+k cmd+r",
+    "command": "workbench.action.splitEditorRight"
+  },
+  {
+    "key": "shift+cmd+s",
+    "command": "workbench.action.files.saveWithoutFormatting"
+  },
+  {
+    "key": "cmd+k s",
+    "command": "-workbench.action.files.saveWithoutFormatting"
+  },
+  {
+    "key": "shift+cmd+s",
+    "command": "-workbench.action.files.saveLocalFile",
+    "when": "remoteFileDialogVisible"
+  },
+  {
+    "key": "shift+cmd+s",
+    "command": "-workbench.action.files.saveAs"
+  },
+  {
+    "key": "cmd+k cmd+m",
+    "command": "extension.MinifyAll"
+  },
+  {
+    "key": "alt+cmd+m",
+    "command": "-extension.MinifyAll"
+  },
+  {
+    "key": "shift+cmd+i",
+    "command": "workbench.view.extension.ionic-recommendation"
+  },
+  {
+    "key": "shift+alt+s",
+    "command": "editor.emmet.action.wrapWithAbbreviation"
+  },
+  {
+    "key": "cmd+shift+r",
+    "command": "workbench.action.tasks.runTask",
+    "args": "Cargo Watch -q"
+  }
+]

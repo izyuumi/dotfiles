@@ -1,0 +1,19 @@
+{
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "python.languageServer": "None",
+  "cursor.cpp.disabledLanguages": [
+    "scminput",
+    "yaml"
+  ],
+  "cursor.cpp.enablePartialAccepts": true,
+  "cursor.composer.shouldChimeAfterChatFinishes": true,
+  "python.createEnvironment.trigger": "off",
+  "diffEditor.ignoreTrimWhitespace": false,
+  "update.releaseTrack": "prerelease",
+  "cursor.composer.textSizeScale": 1.15,
+  "extensions.ignoreRecommendations": true,
+  "remote.autoForwardPortsSource": "hybrid",
+  "window.autoDetectColorScheme": false
+}

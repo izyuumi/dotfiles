@@ -1,0 +1,351 @@
+{
+  "C_Cpp.vcFormat.newLine.beforeOpenBrace.block": "sameLine",
+  "C_Cpp.vcFormat.newLine.beforeOpenBrace.function": "sameLine",
+  "C_Cpp.vcFormat.newLine.beforeOpenBrace.lambda": "sameLine",
+  "C_Cpp.vcFormat.newLine.beforeOpenBrace.namespace": "sameLine",
+  "C_Cpp.vcFormat.newLine.beforeOpenBrace.type": "sameLine",
+  "[astro]": {
+    "editor.defaultFormatter": "astro-build.astro-vscode"
+  },
+  "[cpp]": {
+    "editor.defaultFormatter": "ms-vscode.cpptools"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[lua]": {
+    "editor.defaultFormatter": "sumneko.lua"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[php]": {
+    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+  },
+  "[python]": {
+    "editor.formatOnType": true
+  },
+  "[rust]": {
+    "editor.defaultFormatter": "rust-lang.rust-analyzer",
+    "editor.formatOnSave": true
+  },
+  "[sass]": {
+    "editor.defaultFormatter": "michelemelluso.code-beautifier"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[svg]": {
+    "editor.defaultFormatter": "jock.svg"
+  },
+  "[swift]": {
+    "editor.defaultFormatter": "vknabel.vscode-apple-swift-format",
+    "editor.tabSize": 4
+  },
+  "[typescript]": {
+    "editor.autoClosingBrackets": "always",
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[xml]": {
+    "editor.defaultFormatter": "redhat.vscode-xml"
+  },
+  "astro.trace.server": "verbose",
+  "autoimport.doubleQuotes": true,
+  "autoimport.spaceBetweenBraces": false,
+  "bracketPairColorizer.depreciation-notice": false,
+  "css.lint.vendorPrefix": "ignore",
+  "diffEditor.codeLens": true,
+  "diffEditor.wordWrap": "on",
+  "discord.detailsIdle": "Hi stalker!",
+  "discord.workspaceElapsedTime": true,
+  "editor.accessibilitySupport": "off",
+  "editor.autoClosingBrackets": "never",
+  "editor.autoClosingDelete": "always",
+  "editor.autoClosingOvertype": "always",
+  "editor.codeLensFontFamily": "CommitMono",
+  "editor.defaultFormatter": "numso.prettier-standard-vscode",
+  "editor.fontFamily": "CommitMono",
+  "editor.fontLigatures": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnType": true,
+  "editor.inlayHints.fontFamily": "Monaspace Krypton",
+  "editor.inlineSuggest.enabled": true,
+  "editor.linkedEditing": true,
+  "editor.stickyScroll.enabled": true,
+  "editor.suggest.insertMode": "replace",
+  "editor.suggest.preview": true,
+  "editor.suggestSelection": "first",
+  "editor.wordWrap": "on",
+  "emmet.excludeLanguages": [
+    "markdown",
+    "php"
+  ],
+  "eslint.codeActionsOnSave.rules": null,
+  "explorer.compactFolders": false,
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "flow.enabled": false,
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "git.ignoreMissingGitWarning": true,
+  "git.ignoreRebaseWarning": true,
+  "git.replaceTagsWhenPull": true,
+  "git.suggestSmartCommit": false,
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": true,
+    "markdown": true,
+    "scminput": false,
+    "typescript": true,
+    "yaml": false
+  },
+  "githubPullRequests.createOnPublishBranch": "never",
+  "githubPullRequests.pullBranch": "never",
+  "html.format.endWithNewline": true,
+  "inlineFold.unfoldOnLineSelect": true,
+  "intelephense.stubs": [
+    "apache",
+    "bcmath",
+    "bz2",
+    "calendar",
+    "com_dotnet",
+    "Core",
+    "ctype",
+    "curl",
+    "date",
+    "dba",
+    "dom",
+    "enchant",
+    "exif",
+    "FFI",
+    "fileinfo",
+    "filter",
+    "fpm",
+    "ftp",
+    "gd",
+    "gettext",
+    "gmp",
+    "hash",
+    "iconv",
+    "imap",
+    "intl",
+    "json",
+    "ldap",
+    "libxml",
+    "mbstring",
+    "meta",
+    "mysqli",
+    "oci8",
+    "odbc",
+    "openssl",
+    "pcntl",
+    "pcre",
+    "PDO",
+    "pdo_ibm",
+    "pdo_mysql",
+    "pdo_pgsql",
+    "pdo_sqlite",
+    "pgsql",
+    "Phar",
+    "posix",
+    "pspell",
+    "readline",
+    "Reflection",
+    "session",
+    "shmop",
+    "SimpleXML",
+    "snmp",
+    "soap",
+    "sockets",
+    "sodium",
+    "SPL",
+    "sqlite3",
+    "standard",
+    "superglobals",
+    "sysvmsg",
+    "sysvsem",
+    "sysvshm",
+    "tidy",
+    "tokenizer",
+    "xml",
+    "xmlreader",
+    "xmlrpc",
+    "xmlwriter",
+    "xsl",
+    "Zend OPcache",
+    "zip",
+    "zlib",
+    "sqlsrv",
+    "json"
+  ],
+  "ionic.buildForProduction": true,
+  "ionic.httpsForWeb": true,
+  "ionic.previewInEditor": true,
+  "java.debug.settings.stepping.skipClasses": [],
+  "javascript.format.insertSpaceAfterConstructor": true,
+  "javascript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": true,
+  "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
+  "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": true,
+  "javascript.format.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": true,
+  "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+  "javascript.format.placeOpenBraceOnNewLineForControlBlocks": true,
+  "javascript.format.placeOpenBraceOnNewLineForFunctions": true,
+  "javascript.format.semicolons": "insert",
+  "javascript.inlayHints.functionLikeReturnTypes.enabled": true,
+  "javascript.suggest.completeFunctionCalls": true,
+  "javascript.updateImportsOnFileMove.enabled": "never",
+  "kite.showWelcomeNotificationOnStartup": false,
+  "liveServer.settings.donotShowInfoMsg": true,
+  "liveServer.settings.donotVerifyTags": true,
+  "markdown-preview-enhanced.liveUpdate": false,
+  "markdown-preview-enhanced.previewTheme": "atom-dark.css",
+  "markdown.extension.toc.levels": "2..6",
+  "minify.html": {
+    "caseSensitive": false,
+    "collapseBooleanAttributes": true,
+    "collapseInlineTagWhitespace": false,
+    "collapseWhitespace": true,
+    "conservativeCollapse": false,
+    "customAttrAssign": [],
+    "customAttrCollapse": "",
+    "customAttrSurround": [],
+    "customEventAttributes": [
+      "^on[a-z]{3,}$"
+    ],
+    "decodeEntities": false,
+    "html5": true,
+    "ignoreCustomComments": [
+      "^!"
+    ],
+    "ignoreCustomFragments": [
+      "<%[\\s\\S]*?%>",
+      "<\\?[\\s\\S]*?\\?>"
+    ],
+    "includeAutoGeneratedTags": true,
+    "keepClosingSlash": false,
+    "maxLineLength": false,
+    "minifyCSS": true,
+    "minifyJS": true,
+    "minifyURLs": false,
+    "preserveLineBreaks": false,
+    "preventAttributesEscaping": false,
+    "processConditionalComments": false,
+    "processScripts": [],
+    "quoteCharacter": "\"",
+    "removeAttributeQuotes": false,
+    "removeComments": false,
+    "removeEmptyAttributes": false,
+    "removeEmptyElements": false,
+    "removeOptionalTags": false,
+    "removeRedundantAttributes": false,
+    "removeScriptTypeAttributes": false,
+    "removeStyleLinkTypeAttributes": false,
+    "sortAttributes": false,
+    "sortClassName": false,
+    "trimCustomFragments": false,
+    "useShortDoctype": false
+  },
+  "output.smartScroll.enabled": false,
+  "redhat.telemetry.enabled": false,
+  "rust-analyzer.check.command": "clippy",
+  "security.workspace.trust.untrustedFiles": "open",
+  "snyk.yesWelcomeNotification": false,
+  "sonarlint.rules": {
+    "python:S1481": {
+      "level": "off"
+    },
+    "typescript:S3358": {
+      "level": "off"
+    },
+    "typescript:S6749": {
+      "level": "on"
+    }
+  },
+  "sortJSON.contextMenu": {
+    "sortJSONAlphaNum": false,
+    "sortJSONAlphaNumReverse": false,
+    "sortJSONKeyLengthReverse": false,
+    "sortJSONType": false,
+    "sortJSONTypeReverse": false,
+    "sortJSONValues": false,
+    "sortJSONValuesReverse": false
+  },
+  "standard.enable": false,
+  "svg.preview.mode": "svg",
+  "tabnine.experimentalAutoImports": true,
+  "terminal.integrated.commandsToSkipShell": [
+    "workbench.action.terminal.sendSequence"
+  ],
+  "terminal.integrated.enableMultiLinePasteWarning": false,
+  "terminal.integrated.fontFamily": "monospace",
+  "todohighlight.defaultStyle": {},
+  "totalTypeScript.hiddenTips": [
+    "passing-generics-to-types",
+    "never-keyword",
+    "tuple-type",
+    "mapped-type",
+    "partial-utility-type",
+    "typeof",
+    "interface-with-generics",
+    "generic-slots-in-functions"
+  ],
+  "totalTypeScript.hideAllTips": false,
+  "totalTypeScript.hideBasicTips": true,
+  "tsimporter.doubleQuotes": true,
+  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
+  "typescript.inlayHints.parameterNames.enabled": "all",
+  "typescript.inlayHints.variableTypes.enabled": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "vim.useCtrlKeys": false,
+  "vscode-neovim.highlightGroups.highlights": {
+    "Conceal": "vim",
+    "Directory": "vim",
+    "IncSearch": {
+      "backgroundColor": "theme.editor.findMatchBackground",
+      "borderColor": "theme.editor.findMatchBorder"
+    },
+    "Search": {
+      "backgroundColor": "theme.editor.findMatchHighlightBackground",
+      "borderColor": "theme.editor.findMatchHighlightBorder"
+    },
+    "Substitute": "vim",
+    "Visual": {
+      "backgroundColor": "theme.editor.selectionBackground"
+    }
+  },
+  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+  "workbench.editor.enablePreviewFromQuickOpen": true,
+  "workbench.editorAssociations": {
+    "*.ipynb": "default"
+  },
+  "workbench.startupEditor": "none",
+  "github.copilot.editor.enableAutoCompletions": true,
+  "vsicons.dontShowNewVersionMessage": true,
+  "editor.unicodeHighlight.allowedLocales": {
+    "ja": true
+  },
+  "editor.unicodeHighlight.allowedCharacters": {
+    "！": true
+  },
+  "workbench.sideBar.location": "right",
+  "continue.enableTabAutocomplete": true,
+  "window.commandCenter": false,
+  "rust-analyzer.rustc.source": "discover",
+  "git.openRepositoryInParentFolders": "never",
+  "update.showReleaseNotes": false,
+  "terminal.integrated.stickyScroll.enabled": false,
+  "rust-analyzer.cargo.features": "all",
+  "workbench.iconTheme": "vscode-icons"
+}

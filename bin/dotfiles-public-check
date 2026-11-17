@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Refuse known private state and scan this public repository for secrets.
+
+set -euo pipefail
+
+REPO="${DOTFILES_DIR:-$HOME/dotfiles}"
+cd "$REPO"
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "gitleaks is required; install it with: brew install gitleaks" >&2
+  exit 1
+fi
+
+unsafe_paths=0
+while IFS= read -r -d '' candidate; do
+  case "$candidate" in
+    .gitconfig.local | .ssh/* | .gnupg/* | .aws/* | .kube/config | \
+      .claude.json* | .openclaw/* | \
+      .config/gh/hosts.yml | .config/github-copilot/* | \
+      .config/tailscale-api/* | .config/opencode/service.json | \
+      .config/raycast/* | .config/configstore/* | \
+      .config/everything-tui/history | .config/opensessions/session-order.json | \
+      .config/wireshark/recent* | \
+      Library/Application\ Support/* | Library/Preferences/*)
+      unsafe_paths=$((unsafe_paths + 1))
+      ;;
+  esac
+done < <(git ls-files --cached --others --exclude-standard -z)
+
+if [ "$unsafe_paths" -ne 0 ]; then
+  echo "public check failed: $unsafe_paths known private-state path(s) found" >&2
+  exit 1
+fi
+
+# Redaction is mandatory so a finding never echoes the detected value.
+gitleaks dir --redact=100 --no-banner "$REPO"
+gitleaks git --redact=100 --no-banner --log-opts="--all" "$REPO"
+
+echo "public check passed"

@@ -18,10 +18,8 @@ set -g  focus-events  on
 set -g  default-terminal "tmux-256color"
 set -ga terminal-overrides ",*:Tc"
 set -ag terminal-overrides ",*256col*:colors=256:Tc"
-# Ms = OSC 52 clipboard (works with mosh)
-# https://gist.github.com/yudai/95b20e3da66df1b066531997f982b57b
-set -ag terminal-overrides "vte*:XT:Ms=\\E]52;c;%p2%s\\7,xterm*:XT:Ms=\\E]52;c;%p2%s\\7"
-set -as terminal-features  ',xterm-255color:clipboard,ghostty:clipboard'
+# OSC 52 sends copies through SSH to the attached terminal's clipboard.
+set -as terminal-features ',xterm*:clipboard,vte*:clipboard,tmux*:clipboard'
 
 
 # -----------------------------------------------------------------------------
@@ -62,7 +60,8 @@ bind -T copy-mode-vi Enter                send -X copy-selection-and-cancel
 bind -T copy-mode-vi Escape               send -X cancel
 bind -T copy-mode-vi H                    send -X start-of-line
 bind -T copy-mode-vi L                    send -X end-of-line
-bind -T copy-mode-vi y                    send -X copy-pipe-and-cancel "pbcopy"
+bind -T copy-mode-vi y                    send -X copy-selection-and-cancel
+bind -T copy-mode-vi MouseDragEnd1Pane    send -X copy-selection-and-cancel
 bind -T copy-mode-vi MouseDragEnd2Pane    send -X copy-selection-and-cancel
 
 # Clipboard / paste
