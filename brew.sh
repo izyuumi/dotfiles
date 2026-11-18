@@ -107,7 +107,6 @@ regular_packages=(
 
 cask_packages=(
   "alcove"
-  "alt-tab"
   "antinote"
   "aqua-voice"
   "azookey"
