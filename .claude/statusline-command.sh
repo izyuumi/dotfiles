@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
-# statusline-command.sh — wraps ccusage statusline + caveman badge
+# statusline-command.sh — caveman badge
 
-input=$(cat)
-
-ccusage_output=$(echo "$input" | bun x ccusage statusline 2>/dev/null)
+cat >/dev/null
 
 # Caveman badge from plugin's flag file
 FLAG="$HOME/.claude/.caveman-active"
@@ -18,10 +16,6 @@ if [ -f "$FLAG" ]; then
   fi
 fi
 
-if [ -n "$ccusage_output" ] && [ -n "$caveman_badge" ]; then
-  printf "%s  %b" "$ccusage_output" "$caveman_badge"
-elif [ -n "$ccusage_output" ]; then
-  printf "%s" "$ccusage_output"
-elif [ -n "$caveman_badge" ]; then
+if [ -n "$caveman_badge" ]; then
   printf "%b" "$caveman_badge"
 fi
